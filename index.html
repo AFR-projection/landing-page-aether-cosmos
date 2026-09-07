@@ -125,7 +125,9 @@
     /* ============================================================
        HERO — asymmetric, full-viewport
        ============================================================ */
-    .hero { min-height: 100vh; min-height: 100svh; position: relative; display: flex; align-items: center; padding: 110px 32px 60px; }
+    .hero { min-height: 100vh; min-height: 100svh; position: relative; display: flex; align-items: center; padding: 88px 32px 48px; }
+    @media (min-width: 1024px) { .hero { padding: 96px 32px 52px; } }
+    @media (max-width: 760px) { .hero { align-items: flex-start; padding: 82px 20px 38px; } }
     .hero::before {
       content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
       background:
