@@ -27,11 +27,17 @@
         <div class="hidden md:flex items-center gap-8 text-sm text-[#9aa3b2]">
           <a href="#cinematic" class="hover:text-white transition-colors duration-300">The System</a>
           <a href="#collection" class="hover:text-white transition-colors duration-300">Features</a>
-          <a href="#noema-board" class="hover:text-white transition-colors duration-300">Architecture</a>
+          <a href="#architecture" class="hover:text-white transition-colors duration-300">Architecture</a>
+          <a href="#deploy" class="hover:text-white transition-colors duration-300">Deploy</a>
         </div>
-        <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="text-sm font-normal px-4 py-1.5 rounded-full bg-[#e8eaed] text-[#050608] hover:bg-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.8),_0_2px_4px_rgba(0,0,0,0.1)]">
-          View on GitHub
-        </a>
+        <div class="flex items-center gap-3">
+          <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="text-sm font-normal px-4 py-1.5 rounded-full bg-[#e8eaed] text-[#050608] hover:bg-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.8),_0_2px_4px_rgba(0,0,0,0.1)]">
+            Open Live App
+          </a>
+          <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="hidden sm:inline-flex text-sm font-normal px-4 py-1.5 rounded-full border border-white/15 text-white hover:bg-white/10 transition-colors">
+            GitHub
+          </a>
+        </div>
       </nav>
     </header>
 
@@ -70,7 +76,6 @@
                       <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
                       <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
                     </defs>
-                    <!-- atmosphere -->
                     <circle cx="240" cy="165" r="150" fill="rgba(74,222,128,0.05)" filter="url(#glow)"/>
                     <ellipse cx="240" cy="165" rx="165" ry="56" stroke="rgba(74,222,128,0.20)" stroke-width="0.7" transform="rotate(-14 240 165)" fill="none"/>
                     <ellipse cx="240" cy="165" rx="165" ry="56" stroke="rgba(74,222,128,0.08)" stroke-width="0.5" transform="rotate(-14 240 165)" stroke-dasharray="2 7" fill="none"/>
@@ -78,11 +83,9 @@
                     <ellipse cx="240" cy="165" rx="205" ry="70" stroke="rgba(34,211,238,0.07)" stroke-width="0.4" transform="rotate(18 240 165)" stroke-dasharray="2 8" fill="none"/>
                     <ellipse cx="240" cy="165" rx="125" ry="42" stroke="rgba(167,139,250,0.20)" stroke-width="0.6" transform="rotate(-34 240 165)" fill="none"/>
                     <ellipse cx="240" cy="165" rx="125" ry="42" stroke="rgba(167,139,250,0.09)" stroke-width="0.4" transform="rotate(-34 240 165)" stroke-dasharray="2 6" fill="none"/>
-                    <!-- connecting lines -->
                     <line x1="240" y1="165" x2="415" y2="115" stroke="rgba(74,222,128,0.25)" stroke-width="0.6"/>
                     <line x1="240" y1="165" x2="60" y2="245" stroke="rgba(34,211,238,0.25)" stroke-width="0.6"/>
                     <line x1="240" y1="165" x2="335" y2="285" stroke="rgba(167,139,250,0.25)" stroke-width="0.6"/>
-                    <!-- orbit nodes -->
                     <circle cx="415" cy="115" r="4" fill="#4ade80" filter="url(#soft)"/>
                     <circle cx="415" cy="115" r="1.6" fill="#050608"/>
                     <circle cx="60" cy="245" r="4" fill="#22d3ee" filter="url(#soft)"/>
@@ -91,7 +94,6 @@
                     <circle cx="335" cy="285" r="1.6" fill="#050608"/>
                     <circle cx="105" cy="95" r="3" fill="#4ade80" opacity="0.8"/>
                     <circle cx="370" cy="215" r="3" fill="#22d3ee" opacity="0.8"/>
-                    <!-- planet -->
                     <circle cx="240" cy="165" r="82" fill="url(#coreDark)"/>
                     <circle cx="240" cy="165" r="82" fill="url(#core)" opacity="0.96"/>
                     <path d="M 195 140 Q 210 132, 228 142 T 262 152 Q 275 168, 258 178 Q 240 186, 222 176 Q 204 164, 195 150 Z" fill="rgba(0,40,15,0.35)"/>
@@ -120,7 +122,7 @@
 
         <div style="position: absolute; inset: 0px; z-index: 40; display: flex; align-items: center; justify-content: center; pointer-events: none;">
           <div class="beat flex flex-col items-center" data-beat="0" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <p class="text-xs uppercase" style="letter-spacing:0.35rem; color:#4ade80; margin-bottom:1rem;">v0.4.0 · Self-hosted</p>
+            <p class="text-xs uppercase" style="letter-spacing:0.35rem; color:#4ade80; margin-bottom:1rem;">v0.4.0 · Live on mindvault.dataku.id</p>
             <h1 class="tracking-tight" style="font-size:clamp(2.5rem,8vw,6rem); line-height:0.95; font-weight:500;">Your files.<br>Your memory.<br><em style="font-style:normal; color:#4ade80;">Your agents.</em></h1>
           </div>
           <div class="beat flex flex-col items-center" data-beat="1" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
@@ -151,7 +153,11 @@
           <div class="beat flex flex-col items-center" data-beat="6" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">Deployed Live</p>
             <h2 class="tracking-tight uppercase" style="font-size:clamp(2.375rem,8vw,5.625rem); line-height:1; font-weight:500;">Aether <span style="color:#4ade80">Cosmos</span></h2>
-            <p class="text-sm mt-4 text-[#9aa3b2]">System active — explore what's inside.</p>
+            <p class="text-sm mt-4 text-[#9aa3b2]">Running on a live VPS. Try it, no signup wall.</p>
+            <div style="pointer-events:auto; margin-top:1.75rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+              <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="text-sm font-medium px-6 py-2.5 rounded-full bg-[#4ade80] text-[#050608] hover:bg-[#6ee7a0] transition-colors shadow-[0_0_24px_rgba(74,222,128,0.35)]">Open the live app</a>
+              <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="text-sm font-medium px-6 py-2.5 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors">Deploy your own</a>
+            </div>
           </div>
         </div>
 
@@ -166,107 +172,141 @@
       </div>
     </section>
 
-    <!-- COLLECTION SECTION — FEATURES -->
-    <section id="collection" class="mx-auto px-6 py-24 max-w-[77.5rem] relative overflow-hidden">
-      <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 9px); pointer-events:none;"></div>
+    <!-- LIVE STRIP -->
+    <div class="relative z-10 border-y border-white/[0.06] bg-[#0a0d12]/80">
+      <div class="mx-auto max-w-[77.5rem] px-6 py-3.5 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 text-xs sm:text-sm">
+        <span class="inline-flex items-center gap-2 text-[#9aa3b2]">
+          <span class="w-2 h-2 rounded-full bg-[#4ade80]" style="box-shadow:0 0 8px #4ade80;"></span>
+          Live instance · v0.4.0 · production
+        </span>
+        <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-[#e8eaed] hover:text-[#4ade80] transition-colors">
+          mindvault.dataku.id <iconify-icon icon="solar:arrow-up-right-linear" width="0.9rem"></iconify-icon>
+        </a>
+      </div>
+    </div>
 
+    <!-- FEATURES — asymmetric grid -->
+    <section id="collection" class="mx-auto px-6 py-24 max-w-[77.5rem] relative">
       <div class="reveal-line overflow-hidden">
-        <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">The Cosmos</p>
+        <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">Features</p>
       </div>
       <div class="reveal-line overflow-hidden mt-3">
         <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;" data-scroll-word="true">A self-hosted universe for your files and your agents</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
-        <!-- Card 1 — Second Brain -->
-        <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
-          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background:radial-gradient(circle at 30% 30%, rgba(74,222,128,0.22), transparent 55%), radial-gradient(circle at 75% 70%, rgba(34,211,238,0.14), transparent 50%), #0a0d12;">
-            <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-14">
+        <!-- Second Brain — wide -->
+        <div class="fade-card md:col-span-7 flex flex-col md:flex-row gap-6 border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 border rounded-2xl p-6 md:p-8 backdrop-blur-lg">
+          <div class="rounded-xl overflow-hidden md:w-2/5 shrink-0" style="aspect-ratio:4/3.4; background:radial-gradient(circle at 30% 30%, rgba(74,222,128,0.22), transparent 55%), radial-gradient(circle at 75% 70%, rgba(34,211,238,0.14), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
               <defs>
                 <radialGradient id="n1" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#0d2b1c"/></radialGradient>
                 <filter id="nglow"><feGaussianBlur stdDeviation="6"/></filter>
               </defs>
               <g stroke="rgba(74,222,128,0.30)" stroke-width="0.8">
-                <line x1="200" y1="250" x2="80" y2="140"/><line x1="200" y1="250" x2="320" y2="120"/><line x1="200" y1="250" x2="90" y2="370"/>
-                <line x1="200" y1="250" x2="310" y2="380"/><line x1="200" y1="250" x2="200" y2="70"/><line x1="200" y1="250" x2="200" y2="440"/>
-                <line x1="80" y1="140" x2="200" y2="70"/><line x1="320" y1="120" x2="200" y2="70"/><line x1="90" y1="370" x2="310" y2="380"/>
+                <line x1="200" y1="170" x2="80" y2="90"/><line x1="200" y1="170" x2="320" y2="80"/><line x1="200" y1="170" x2="90" y2="270"/>
+                <line x1="200" y1="170" x2="310" y2="280"/><line x1="200" y1="170" x2="200" y2="40"/><line x1="80" y1="90" x2="200" y2="40"/><line x1="320" y1="80" x2="200" y2="40"/>
               </g>
               <g fill="#050608" stroke="#4ade80" stroke-width="1.4">
-                <circle cx="200" cy="250" r="22" fill="url(#n1)"/>
-                <circle cx="80" cy="140" r="8" fill="url(#n1)"/>
-                <circle cx="320" cy="120" r="8" fill="url(#n1)"/>
-                <circle cx="90" cy="370" r="8" fill="url(#n1)"/>
-                <circle cx="310" cy="380" r="8" fill="url(#n1)"/>
-                <circle cx="200" cy="70" r="8" fill="url(#n1)"/>
-                <circle cx="200" cy="440" r="8" fill="url(#n1)"/>
+                <circle cx="200" cy="170" r="22" fill="url(#n1)"/>
+                <circle cx="80" cy="90" r="9" fill="url(#n1)"/>
+                <circle cx="320" cy="80" r="9" fill="url(#n1)"/>
+                <circle cx="90" cy="270" r="9" fill="url(#n1)"/>
+                <circle cx="310" cy="280" r="9" fill="url(#n1)"/>
+                <circle cx="200" cy="40" r="9" fill="url(#n1)"/>
               </g>
-              <circle cx="200" cy="250" r="34" stroke="rgba(74,222,128,0.35)" stroke-width="0.8" fill="none" filter="url(#nglow)"/>
+              <circle cx="200" cy="170" r="36" stroke="rgba(74,222,128,0.35)" stroke-width="0.8" fill="none" filter="url(#nglow)"/>
             </svg>
           </div>
-          <div class="flex flex-col flex-grow justify-between">
-            <div>
-              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8eaed]">Second Brain</h3>
-              <p class="text-sm mt-1.5 text-[#9aa3b2]">Versioned memories and an interactive knowledge graph your agents actually remember.</p>
-            </div>
-            <p class="text-sm mt-4 font-normal text-[#4ade80]">Memory · Knowledge graph</p>
+          <div class="flex flex-col flex-grow justify-center">
+            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">Second Brain</h3>
+            <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">Persistent, user-owned memory for AI agents. Versioned memories, an interactive knowledge graph, and hybrid retrieval.</p>
+            <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
+              <li class="flex items-start gap-2"><span class="text-[#4ade80] mt-0.5">→</span>Versioned memories, never lost on model change</li>
+              <li class="flex items-start gap-2"><span class="text-[#4ade80] mt-0.5">→</span>Interactive knowledge graph with full CRUD</li>
+              <li class="flex items-start gap-2"><span class="text-[#4ade80] mt-0.5">→</span>MCP server agents connect to over HTTP</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Card 2 — Secure Files -->
-        <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
-          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background:radial-gradient(circle at 30% 30%, rgba(34,211,238,0.20), transparent 55%), radial-gradient(circle at 75% 70%, rgba(74,222,128,0.12), transparent 50%), #0a0d12;">
-            <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <!-- Secure Files — narrow -->
+        <div class="fade-card md:col-span-5 flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 border rounded-2xl p-6 md:p-8 backdrop-blur-lg">
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:16/9; background:radial-gradient(circle at 30% 30%, rgba(34,211,238,0.20), transparent 55%), radial-gradient(circle at 75% 70%, rgba(74,222,128,0.12), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 230" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
               <defs>
                 <radialGradient id="n2" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#0b2430"/></radialGradient>
-                <filter id="nglow2"><feGaussianBlur stdDeviation="6"/></filter>
               </defs>
-              <ellipse cx="200" cy="250" rx="150" ry="60" stroke="rgba(34,211,238,0.25)" stroke-width="0.8" transform="rotate(-12 200 250)" fill="none"/>
-              <ellipse cx="200" cy="250" rx="150" ry="60" stroke="rgba(34,211,238,0.10)" stroke-width="0.6" transform="rotate(-12 200 250)" stroke-dasharray="2 7" fill="none"/>
-              <ellipse cx="200" cy="250" rx="180" ry="72" stroke="rgba(74,222,128,0.16)" stroke-width="0.6" transform="rotate(16 200 250)" fill="none"/>
-              <line x1="200" y1="250" x2="348" y2="205" stroke="rgba(34,211,238,0.3)" stroke-width="0.8"/>
-              <line x1="200" y1="250" x2="52" y2="290" stroke="rgba(74,222,128,0.3)" stroke-width="0.8"/>
-              <circle cx="200" cy="250" r="42" fill="#050608" stroke="#22d3ee" stroke-width="1.6"/>
-              <path d="M 182 260 a 20 20 0 0 1 14 -24 a 24 24 0 0 1 44 6 a 18 18 0 0 1 8 34 l -8 4 h -56 z" fill="url(#n2)"/>
-              <circle cx="348" cy="205" r="6" fill="#22d3ee" filter="url(#nglow2)"/>
-              <circle cx="52" cy="290" r="6" fill="#4ade80" filter="url(#nglow2)"/>
-              <rect x="162" y="238" width="76" height="46" rx="8" stroke="rgba(232,234,237,0.5)" stroke-width="1" fill="none"/>
+              <ellipse cx="200" cy="115" rx="150" ry="52" stroke="rgba(34,211,238,0.25)" stroke-width="0.8" transform="rotate(-10 200 115)" fill="none"/>
+              <ellipse cx="200" cy="115" rx="150" ry="52" stroke="rgba(34,211,238,0.10)" stroke-width="0.6" transform="rotate(-10 200 115)" stroke-dasharray="2 7" fill="none"/>
+              <line x1="200" y1="115" x2="348" y2="80" stroke="rgba(34,211,238,0.3)" stroke-width="0.8"/>
+              <circle cx="200" cy="115" r="38" fill="#050608" stroke="#22d3ee" stroke-width="1.6"/>
+              <path d="M 184 124 a 18 18 0 0 1 12 -22 a 22 22 0 0 1 40 6 a 16 16 0 0 1 7 30 l -7 4 h -50 z" fill="url(#n2)"/>
+              <circle cx="348" cy="80" r="6" fill="#22d3ee"/>
             </svg>
           </div>
-          <div class="flex flex-col flex-grow justify-between">
-            <div>
-              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8eaed]">Secure Files</h3>
-              <p class="text-sm mt-1.5 text-[#9aa3b2]">R2-backed storage with end-to-end encryption, versions, recycle bin, and ranked search.</p>
-            </div>
-            <p class="text-sm mt-4 font-normal text-[#22d3ee]">Storage · E2E encryption</p>
+          <div class="flex flex-col flex-grow justify-center">
+            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">Secure Files</h3>
+            <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">R2-backed object storage with folder uploads, versions, recycle bin, and ranked search.</p>
+            <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
+              <li class="flex items-start gap-2"><span class="text-[#22d3ee] mt-0.5">→</span>End-to-end encryption, AES-GCM in-browser</li>
+              <li class="flex items-start gap-2"><span class="text-[#22d3ee] mt-0.5">→</span>Multipart uploads with resume &amp; retry</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Card 3 — MCP Server -->
-        <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
-          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background:radial-gradient(circle at 30% 30%, rgba(167,139,250,0.20), transparent 55%), radial-gradient(circle at 75% 70%, rgba(34,211,238,0.12), transparent 50%), #0a0d12;">
-            <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <!-- MCP Server — narrow -->
+        <div class="fade-card md:col-span-5 flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 border rounded-2xl p-6 md:p-8 backdrop-blur-lg">
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:16/9; background:radial-gradient(circle at 30% 30%, rgba(167,139,250,0.20), transparent 55%), radial-gradient(circle at 75% 70%, rgba(34,211,238,0.12), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 230" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
               <defs>
                 <radialGradient id="n3" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#241b4d"/></radialGradient>
-                <filter id="nglow3"><feGaussianBlur stdDeviation="6"/></filter>
               </defs>
               <g stroke="rgba(167,139,250,0.30)" stroke-width="0.8">
-                <line x1="200" y1="120" x2="90" y2="350"/><line x1="200" y1="120" x2="310" y2="350"/>
-                <line x1="90" y1="350" x2="310" y2="350"/><line x1="200" y1="120" x2="200" y2="390"/>
-                <line x1="90" y1="350" x2="200" y2="390"/><line x1="310" y1="350" x2="200" y2="390"/>
+                <line x1="200" y1="60" x2="90" y2="180"/><line x1="200" y1="60" x2="310" y2="180"/><line x1="90" y1="180" x2="310" y2="180"/>
+                <line x1="200" y1="60" x2="200" y2="190"/><line x1="90" y1="180" x2="200" y2="190"/><line x1="310" y1="180" x2="200" y2="190"/>
               </g>
-              <circle cx="200" cy="120" r="24" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.6"/>
-              <circle cx="90" cy="350" r="16" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.4"/>
-              <circle cx="310" cy="350" r="16" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.4"/>
-              <circle cx="200" cy="390" r="12" fill="url(#n3)" stroke="#22d3ee" stroke-width="1.2"/>
-              <circle cx="200" cy="120" r="36" stroke="rgba(167,139,250,0.35)" stroke-width="0.8" fill="none" filter="url(#nglow3)"/>
+              <circle cx="200" cy="60" r="22" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.6"/>
+              <circle cx="90" cy="180" r="14" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.4"/>
+              <circle cx="310" cy="180" r="14" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.4"/>
+              <circle cx="200" cy="190" r="10" fill="url(#n3)" stroke="#22d3ee" stroke-width="1.2"/>
             </svg>
           </div>
-          <div class="flex flex-col flex-grow justify-between">
-            <div>
-              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8eaed]">MCP Server</h3>
-              <p class="text-sm mt-1.5 text-[#9aa3b2]">Thirty-two tools over HTTP. Any agent, any model — the memory stays yours.</p>
-            </div>
-            <p class="text-sm mt-4 font-normal text-[#a78bfa]">Agents · 32 MCP tools</p>
+          <div class="flex flex-col flex-grow justify-center">
+            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">MCP Server</h3>
+            <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">Thirty-two tools over HTTP. Any agent, any model — the memory stays yours.</p>
+            <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
+              <li class="flex items-start gap-2"><span class="text-[#a78bfa] mt-0.5">→</span>Model-agnostic MCP endpoint</li>
+              <li class="flex items-start gap-2"><span class="text-[#a78bfa] mt-0.5">→</span>API keys with scopes, webhooks, OAuth</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Accounts & Admin — wide -->
+        <div class="fade-card md:col-span-7 flex flex-col md:flex-row gap-6 border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 border rounded-2xl p-6 md:p-8 backdrop-blur-lg">
+          <div class="flex flex-col flex-grow justify-center order-2 md:order-1">
+            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">Accounts, Admin &amp; Backup</h3>
+            <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">Production-grade user management and full data portability — nothing is locked in.</p>
+            <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
+              <li class="flex items-start gap-2"><span class="text-[#4ade80] mt-0.5">→</span>Argon2id sessions, TOTP 2FA, numeric second step</li>
+              <li class="flex items-start gap-2"><span class="text-[#4ade80] mt-0.5">→</span>Admin: user management, share audits, storage analytics</li>
+              <li class="flex items-start gap-2"><span class="text-[#4ade80] mt-0.5">→</span>One-click encrypted .afrbak export with nine-word recovery</li>
+            </ul>
+          </div>
+          <div class="rounded-xl overflow-hidden md:w-2/5 shrink-0 order-1 md:order-2" style="aspect-ratio:4/3.4; background:radial-gradient(circle at 30% 30%, rgba(74,222,128,0.18), transparent 55%), radial-gradient(circle at 75% 70%, rgba(167,139,250,0.14), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+              <defs>
+                <radialGradient id="n4" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#0d2b1c"/></radialGradient>
+              </defs>
+              <rect x="40" y="40" width="150" height="110" rx="10" stroke="rgba(74,222,128,0.4)" stroke-width="1.2" fill="rgba(74,222,128,0.05)"/>
+              <rect x="210" y="40" width="150" height="110" rx="10" stroke="rgba(34,211,238,0.4)" stroke-width="1.2" fill="rgba(34,211,238,0.05)"/>
+              <rect x="40" y="190" width="150" height="110" rx="10" stroke="rgba(167,139,250,0.4)" stroke-width="1.2" fill="rgba(167,139,250,0.05)"/>
+              <rect x="210" y="190" width="150" height="110" rx="10" stroke="rgba(74,222,128,0.4)" stroke-width="1.2" fill="rgba(74,222,128,0.05)"/>
+              <path d="M 190 95 H 210 M 190 245 H 210 M 115 150 V 190 M 285 150 V 190" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+              <circle cx="200" cy="95" r="5" fill="#4ade80"/>
+              <circle cx="200" cy="245" r="5" fill="#4ade80"/>
+              <circle cx="115" cy="170" r="5" fill="#4ade80"/>
+              <circle cx="285" cy="170" r="5" fill="#4ade80"/>
+            </svg>
           </div>
         </div>
       </div>
@@ -279,13 +319,14 @@
         <div class="reveal-line overflow-hidden">
           <h2 class="tracking-tight text-white" style="font-size:clamp(1.75rem,5vw,3.25rem); font-weight:500; max-width:40rem; line-height:1.1;">Your server can die. Your model can change. <span style="color:#4ade80">Your Brain stays yours.</span></h2>
         </div>
-        <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-8 text-sm font-medium px-5 py-2.5 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors backdrop-blur-md">
-          Explore the architecture
-          <iconify-icon icon="solar:arrow-right-linear" width="1rem"></iconify-icon>
+        <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-8 text-sm font-medium px-5 py-2.5 rounded-full bg-[#4ade80] text-[#050608] hover:bg-[#6ee7a0] transition-colors">
+          Try the live instance
+          <iconify-icon icon="solar:arrow-up-right-linear" width="1rem"></iconify-icon>
         </a>
       </div>
     </section>
 
+    <!-- STACK -->
     <section id="integration" class="mx-auto px-6 py-24 max-w-[77.5rem] relative">
       <div class="reveal-line overflow-hidden">
         <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">The Stack</p>
@@ -293,96 +334,121 @@
       <div class="reveal-line overflow-hidden mt-3">
         <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">Built on a serious foundation</h2>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
-        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-10 py-10">
-          <iconify-icon icon="solar:atom-linear" width="2.5rem" class="text-[#4ade80] mb-6"></iconify-icon>
-          <h3 class="text-xl font-medium tracking-tight text-[#e8eaed] mb-2">Next.js 16 · React 19</h3>
-          <p class="text-sm text-[#9aa3b2]">App Router, strict TypeScript, Tailwind CSS v4, Radix UI, Framer Motion. 3,422 tests — vetted end to end.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-8 py-10">
+          <iconify-icon icon="solar:atom-linear" width="2rem" class="text-[#4ade80] mb-5"></iconify-icon>
+          <h3 class="text-base font-medium tracking-tight text-[#e8eaed] mb-2">Next.js 16 · React 19</h3>
+          <p class="text-sm text-[#9aa3b2] leading-relaxed">App Router, strict TypeScript, Tailwind v4, Radix UI, Framer Motion. 3,422 tests passing.</p>
         </div>
-        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-10 py-10">
-          <iconify-icon icon="solar:database-linear" width="2.5rem" class="text-[#22d3ee] mb-6"></iconify-icon>
-          <h3 class="text-xl font-medium tracking-tight text-[#e8eaed] mb-2">PostgreSQL · Redis · R2</h3>
-          <p class="text-sm text-[#9aa3b2]">Drizzle ORM, BullMQ queues, full-text search, Argon2id sessions with TOTP 2FA. Cloudflare R2 object storage.</p>
+        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-8 py-10">
+          <iconify-icon icon="solar:database-linear" width="2rem" class="text-[#22d3ee] mb-5"></iconify-icon>
+          <h3 class="text-base font-medium tracking-tight text-[#e8eaed] mb-2">PostgreSQL · Redis · R2</h3>
+          <p class="text-sm text-[#9aa3b2] leading-relaxed">Drizzle ORM, BullMQ queues, full-text search, Argon2id sessions with TOTP 2FA.</p>
+        </div>
+        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-8 py-10">
+          <iconify-icon icon="solar:server-square-linear" width="2rem" class="text-[#a78bfa] mb-5"></iconify-icon>
+          <h3 class="text-base font-medium tracking-tight text-[#e8eaed] mb-2">One VPS, Docker Compose</h3>
+          <p class="text-sm text-[#9aa3b2] leading-relaxed">Nginx + Certbot in front. `aether update / status / logs` for daily ops.</p>
         </div>
       </div>
     </section>
 
-    <section id="noema-manifesto" style="position:relative; min-height:100vh; background:#e8eaed; color:#050505; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:6rem 1.25rem; font-family:'Inter',sans-serif;">
-      <div style="position:absolute; inset:0; background:radial-gradient(circle at 20% 30%, rgba(74,222,128,0.28), transparent 32%), radial-gradient(circle at 80% 72%, rgba(167,139,250,0.26), transparent 30%);"></div>
-      <div style="position:relative; z-index:10; max-width:min(1180px,92vw); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.18em 0.28em; text-align:center;">
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Your</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">files.</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Your</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">memory.</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Your</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">agents.</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">One</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">self-hosted</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">cosmos.</span>
+    <!-- ARCHITECTURE FLOW -->
+    <section id="architecture" class="relative py-24 overflow-hidden" style="background:#0a0d12;">
+      <div class="mx-auto px-6 max-w-[77.5rem]">
+        <div class="reveal-line overflow-hidden">
+          <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">Architecture</p>
+        </div>
+        <div class="reveal-line overflow-hidden mt-3">
+          <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">One deploy. Three stores. Zero lock-in.</h2>
+        </div>
+        <div class="reveal-line overflow-hidden mt-4">
+          <p class="text-sm text-[#9aa3b2] max-w-xl leading-relaxed">A single Next.js app behind Nginx, talking to Cloudflare R2 for objects, PostgreSQL for metadata and memory, and Redis for queues — plus an MCP server agents connect to over HTTP.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-14 items-stretch">
+          <div class="md:col-span-3 flex flex-col justify-center gap-4">
+            <div class="border border-white/[0.08] bg-[#050608] rounded-2xl p-6">
+              <p class="text-[10px] uppercase tracking-[0.2em] text-[#9aa3b2] mb-2">You</p>
+              <p class="text-sm text-[#e8eaed] font-medium">Browser &amp; mobile</p>
+              <p class="text-xs text-[#9aa3b2] mt-1.5">Uploads, previews, shares, admin</p>
+            </div>
+            <div class="border border-white/[0.08] bg-[#050608] rounded-2xl p-6">
+              <p class="text-[10px] uppercase tracking-[0.2em] text-[#9aa3b2] mb-2">Your agents</p>
+              <p class="text-sm text-[#e8eaed] font-medium">Claude Code · Codex · any MCP client</p>
+              <p class="text-xs text-[#9aa3b2] mt-1.5">32 tools over HTTP, model-agnostic</p>
+            </div>
+          </div>
+          <div class="md:col-span-3 flex items-center">
+            <div class="border border-[#4ade80]/30 bg-[#0d2b1c] rounded-2xl p-6 w-full" style="box-shadow:0 0 40px rgba(74,222,128,0.08);">
+              <p class="text-[10px] uppercase tracking-[0.2em] text-[#4ade80] mb-2">Aether Cosmos</p>
+              <p class="text-sm text-white font-medium">Next.js 16 app</p>
+              <p class="text-xs text-[#9aa3b2] mt-1.5">Auth · Files · Second Brain · Admin · API</p>
+              <p class="text-xs text-[#9aa3b2] mt-1.5">Docker Compose · Nginx · Certbot</p>
+            </div>
+          </div>
+          <div class="md:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="border border-white/[0.08] bg-[#050608] rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
+              <iconify-icon icon="solar:cloud-linear" width="1.4rem" class="text-[#22d3ee]"></iconify-icon>
+              <div>
+                <p class="text-sm text-white font-medium">Cloudflare R2</p>
+                <p class="text-xs text-[#9aa3b2] mt-1">Files &amp; objects<br>S3-compatible</p>
+              </div>
+            </div>
+            <div class="border border-white/[0.08] bg-[#050608] rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
+              <iconify-icon icon="solar:database-linear" width="1.4rem" class="text-[#4ade80]"></iconify-icon>
+              <div>
+                <p class="text-sm text-white font-medium">PostgreSQL</p>
+                <p class="text-xs text-[#9aa3b2] mt-1">Metadata &amp; memory<br>Knowledge graph</p>
+              </div>
+            </div>
+            <div class="border border-white/[0.08] bg-[#050608] rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
+              <iconify-icon icon="solar:server-path-linear" width="1.4rem" class="text-[#a78bfa]"></iconify-icon>
+              <div>
+                <p class="text-sm text-white font-medium">Redis</p>
+                <p class="text-xs text-[#9aa3b2] mt-1">Queues &amp; rate limits<br>BullMQ workers</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <p style="position:absolute; left:1.25rem; bottom:1.25rem; z-index:10; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; color:rgba(0,0,0,0.6);">01 / The Cosmos</p>
     </section>
 
-    <section id="noema-board" style="position:relative; min-height:100vh; color:#e8eaed; overflow:hidden; padding:7rem 1.25rem 4rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
-      <h2 style="position:absolute; z-index:0; color:rgba(255,255,255,0.05); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:50%; transform:translate(-50%,-50%);">BRAIN</h2>
-      <div style="position:relative; z-index:10; width:100%; max-width:72rem; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.75rem;">
-        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#0a0d12; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Storage</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Cloudflare R2<br>Backed</h3>
+    <!-- DEPLOY / GET STARTED -->
+    <section id="deploy" class="mx-auto px-6 py-24 max-w-[77.5rem] relative">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <div class="reveal-line overflow-hidden">
+            <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">Deploy</p>
           </div>
-          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
-            <span>S3-compatible<br>Multipart uploads</span>
+          <div class="reveal-line overflow-hidden mt-3">
+            <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.25rem); font-weight:500; line-height:1.05;">Live today. Yours tomorrow.</h2>
           </div>
-        </article>
-        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#0a0d12; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Memory</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Knowledge<br>Graph</h3>
+          <div class="reveal-line overflow-hidden mt-4">
+            <p class="text-sm text-[#9aa3b2] leading-relaxed max-w-lg">The instance at mindvault.dataku.id runs this exact build in production. Spin up your own on any Ubuntu VPS with one command — installs Docker, issues the certificate, builds, and health-checks.</p>
           </div>
-          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
-            <span>PostgreSQL<br>Hybrid retrieval</span>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="text-sm font-medium px-6 py-2.5 rounded-full bg-[#4ade80] text-[#050608] hover:bg-[#6ee7a0] transition-colors">Open the live app</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/deployment.md" target="_blank" rel="noopener" class="text-sm font-medium px-6 py-2.5 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors">Read deployment docs</a>
           </div>
-        </article>
-        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#0a0d12; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Agents</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">MCP Server<br>Live</h3>
-          </div>
-          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
-            <span>32 tools · HTTP<br>Model-agnostic</span>
-          </div>
-        </article>
-        <article style="min-height:158px; border:1px solid rgba(0,0,0,0.2); background:#4ade80; color:#050505; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(0,0,0,0.55);">Security</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">E2E<br>Encryption</h3>
-          </div>
-          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(0,0,0,0.65);">
-            <span>Argon2id · 2FA<br>Zero-trust</span>
-          </div>
-        </article>
-      </div>
-    </section>
+        </div>
 
-    <section id="noema-support" style="position:relative; min-height:100vh; background:#000000; color:white; overflow:hidden; padding:0 1.25rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
-      <h2 style="position:absolute; z-index:0; color:rgba(255,255,255,0.04); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:46%; transform:translate(-50%,-50%);">YOURS</h2>
-      <div style="position: relative; z-index: 10; width: 100%; max-width: 72rem; margin: 0px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; padding: 5rem 0px;">
-        <article style="border:1px solid rgba(255,255,255,0.28); background:#050608; color:white; min-height:310px; padding:1.25rem;">
-          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">01 / Files</p>
-          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">STORED</h3>
-          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">Upload, share, version, search — encrypted in your browser before the server ever sees it.</p>
-        </article>
-        <article style="border:1px solid rgba(74,222,128,0.35); background:#4ade80; color:#050505; min-height:310px; padding:1.25rem;">
-          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(0,0,0,0.55);">02 / Memory</p>
-          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">REMEMBERED</h3>
-          <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" style="margin-top: 2rem; width: 100%; background: rgb(5, 5, 5); color: white; font-size: 0.875rem; font-weight: 500; padding: 0.75rem; border: medium; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration:none;">View the source</a>
-        </article>
-        <article style="border:1px solid rgba(255,255,255,0.28); background:#050608; color:white; min-height:310px; padding:1.25rem;">
-          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">03 / Agents</p>
-          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">DEPLOYED</h3>
-          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">MCP over HTTP — any agent keeps your memory, in your own universe.</p>
-        </article>
+        <div class="fade-card">
+          <div class="rounded-2xl border border-white/[0.08] bg-[#0a0d12] overflow-hidden">
+            <div class="flex items-center gap-2 px-5 py-3 border-b border-white/[0.06]">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#f43f5e]/70"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#fbbf24]/70"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#4ade80]/70"></span>
+              <span class="ml-3 text-xs text-[#5d6573] font-mono">aether — one command deploy</span>
+            </div>
+            <pre class="px-5 py-6 text-[13px] leading-relaxed font-mono overflow-x-auto" style="color:#9aa3b2;"><span style="color:#4ade80">$</span> curl -fsSL https://raw.githubusercontent.com/AFR-projection/Aether-Cosmos/main/scripts/deploy/setup.sh | bash
+<span style="color:#5d6573"># installs Docker · clones · opens .env
+# issues TLS · builds · health-checks</span>
+<span style="color:#4ade80">$</span> aether update     <span style="color:#5d6573"># pull · rebuild · sync · renew</span>
+<span style="color:#4ade80">$</span> aether status     <span style="color:#5d6573"># health of every service</span>
+<span style="color:#4ade80">$</span> aether logs app   <span style="color:#5d6573"># follow logs</span></pre>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -392,12 +458,15 @@
         <div>
           <span class="text-sm font-medium tracking-tighter uppercase text-white">Aether Cosmos <span style="color:#4ade80">by AFR</span></span>
           <p class="text-sm mt-4 text-[#7d7a73]" style="max-width:17.5rem;">Self-hosted cloud storage with a Second Brain knowledge layer for AI agents. v0.4.0.</p>
+          <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-4 text-sm text-[#4ade80] hover:text-[#6ee7a0] transition-colors">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span> mindvault.dataku.id
+          </a>
         </div>
         <div class="flex gap-16 text-sm text-[#9aa3b2]">
           <div class="flex flex-col gap-3">
+            <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="hover:text-white transition-colors">Live App</a>
             <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="hover:text-white transition-colors">GitHub</a>
             <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/README.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Documentation</a>
-            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/deployment.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Deployment</a>
           </div>
           <div class="flex flex-col gap-3">
             <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/features.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Features</a>
@@ -408,6 +477,7 @@
       </div>
       <div class="mt-16 flex items-center justify-between">
         <p class="text-xs text-[#5c5a55]">© 2026 Aether Cosmos ByAFR. All rights reserved.</p>
+        <p class="text-xs text-[#5c5a55] font-mono">v0.4.0 · 3,422 tests</p>
       </div>
     </footer>
 
@@ -578,6 +648,10 @@
             yPercent: 20, ease: 'none',
             scrollTrigger: { trigger: '#craft', start: 'top bottom', end: 'bottom top', scrub: true }
           });
+
+          gsap.utils.toArray('#architecture .border, #architecture > div > div > div').forEach(function(c){
+            gsap.fromTo(c, {y: 30, autoAlpha: 0}, {y: 0, autoAlpha: 1, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: c, start: 'top 90%' }});
+          });
         }
       })();
     </script>
@@ -689,7 +763,7 @@
         cards.forEach(card => {
           card.style.transformStyle = 'preserve-3d';
           const img = card.querySelector('.rounded-xl');
-          const content = card.querySelector('.flex-grow');
+          const content = card.querySelector('.flex-grow, .flex-1');
 
           card.addEventListener('mousemove', e => {
             const rect = card.getBoundingClientRect();
@@ -697,19 +771,19 @@
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
+            const rotateX = ((y - centerY) / centerY) * -6;
+            const rotateY = ((x - centerX) / centerX) * 6;
 
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
             card.style.transition = 'transform 0.1s ease-out';
             card.style.zIndex = '10';
 
             if (img) {
-              img.style.transform = 'translateZ(30px)';
+              img.style.transform = 'translateZ(24px)';
               img.style.transition = 'transform 0.1s ease-out';
             }
             if (content) {
-              content.style.transform = 'translateZ(20px)';
+              content.style.transform = 'translateZ(14px)';
               content.style.transition = 'transform 0.1s ease-out';
             }
           });
@@ -733,22 +807,17 @@
     </script>
 
     <script>
-      (function(){function init(){if(!window.gsap||!window.ScrollTrigger)return;gsap.registerPlugin(ScrollTrigger);var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduce)return;var cards=gsap.utils.toArray('#collection .fade-card');if(cards.length){gsap.fromTo(cards,{x:function(i){return[-260,0,240][i]||0;},y:function(i){return[-80,120,-80][i]||0;},rotate:function(i){return[-14,0,14][i]||0;},scale:0.86,autoAlpha:0.4},{x:0,y:0,rotate:0,scale:1,autoAlpha:1,stagger:0.05,ease:'none',scrollTrigger:{trigger:'#collection',start:'top 80%',end:'top 20%',scrub:1}});}gsap.fromTo('#collection [data-scroll-word]',{y:'6vh',scale:1.04},{y:'-4vh',scale:0.99,ease:'none',scrollTrigger:{trigger:'#collection',start:'top bottom',end:'bottom top',scrub:1}});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
+      (function(){function init(){if(!window.gsap||!window.ScrollTrigger)return;gsap.registerPlugin(ScrollTrigger);var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduce)return;var cards=gsap.utils.toArray('#collection .fade-card');if(cards.length){gsap.fromTo(cards,{y:70,autoAlpha:0.4,scale:0.97},{y:0,autoAlpha:1,scale:1,stagger:0.06,ease:'power2.out',scrollTrigger:{trigger:'#collection',start:'top 75%'}});}gsap.fromTo('#collection [data-scroll-word]',{y:'5vh'},{y:'-3vh',ease:'none',scrollTrigger:{trigger:'#collection',start:'top bottom',end:'bottom top',scrub:1}});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
     </script>
 
     <script>
       (function(){function init(){if(!window.gsap||!window.ScrollTrigger)return;gsap.registerPlugin(ScrollTrigger);var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduce)return;
       gsap.to('#bgLayer',{yPercent:18,ease:'none',scrollTrigger:{trigger:'#cinematic',start:'top top',end:'bottom top',scrub:1}});
-      gsap.utils.toArray('#integration .fade-card').forEach(function(c,i){gsap.fromTo(c,{y:60,rotateX:12,autoAlpha:0,transformPerspective:900},{y:0,rotateX:0,autoAlpha:1,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:c,start:'top 88%'}});});
       gsap.to('#craft .reveal-line',{yPercent:-15,ease:'none',scrollTrigger:{trigger:'#craft',start:'top bottom',end:'bottom top',scrub:1}});
-      var words=gsap.utils.toArray('#noema-manifesto span[style*="font-weight:800"]');
-      if(words.length){gsap.fromTo(words,{autoAlpha:0.12,y:'0.4em'},{autoAlpha:1,y:'0em',ease:'none',stagger:0.4,scrollTrigger:{trigger:'#noema-manifesto',start:'top 70%',end:'center center',scrub:1}});}
-      gsap.to('#noema-board h2',{yPercent:-14,ease:'none',scrollTrigger:{trigger:'#noema-board',start:'top bottom',end:'bottom top',scrub:1}});
-      gsap.utils.toArray('#noema-board article').forEach(function(a,i){gsap.fromTo(a,{y:70,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power3.out',delay:i*0.08,scrollTrigger:{trigger:'#noema-board',start:'top 75%'}});});
-      gsap.to('#noema-support h2',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'#noema-support',start:'top bottom',end:'bottom top',scrub:1}});
-      gsap.utils.toArray('#noema-support article').forEach(function(a,i){gsap.fromTo(a,{y:90,rotateX:8,autoAlpha:0,transformPerspective:900},{y:0,rotateX:0,autoAlpha:1,duration:0.9,ease:'power3.out',delay:i*0.1,scrollTrigger:{trigger:'#noema-support',start:'top 72%'}});});
+      gsap.utils.toArray('#integration .fade-card').forEach(function(c,i){gsap.fromTo(c,{y:50,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power3.out',delay:i*0.08,scrollTrigger:{trigger:c,start:'top 88%'}});});
+      gsap.utils.toArray('#deploy .fade-card').forEach(function(c){gsap.fromTo(c,{y:50,autoAlpha:0},{y:0,autoAlpha:1,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:c,start:'top 85%'}});});
       gsap.fromTo('footer > div',{y:40,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power2.out',scrollTrigger:{trigger:'footer',start:'top 90%'}});
-      var mag=document.querySelectorAll('nav a, nav button, #craft a, #noema-support a, footer a');
+      var mag=document.querySelectorAll('nav a, nav button, #craft a, #deploy a, footer a');
       mag.forEach(function(el){el.style.willChange='transform';el.style.display=el.style.display||'inline-flex';el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect();var mx=(e.clientX-r.left-r.width/2)/r.width;var my=(e.clientY-r.top-r.height/2)/r.height;gsap.to(el,{x:mx*6,y:my*4,duration:0.4,ease:'power2.out'});});el.addEventListener('mouseleave',function(){gsap.to(el,{x:0,y:0,duration:0.5,ease:'elastic.out(1,0.4)'});});});
       document.querySelectorAll('#dotRow span').forEach(function(d){d.addEventListener('mouseenter',function(){gsap.to(d,{scale:1.8,duration:0.3,ease:'back.out(2)'});});d.addEventListener('mouseleave',function(){gsap.to(d,{scale:1,duration:0.3});});});
       }if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
