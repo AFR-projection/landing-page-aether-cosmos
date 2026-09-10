@@ -2,30 +2,36 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus — Cinematic AI Agents Experience</title>
+<title>Aether Cosmos — Self-Hosted Cloud with a Second Brain for AI Agents</title>
+<meta name="description" content="Aether Cosmos by AFR. Self-hosted cloud storage with a Second Brain knowledge layer for AI agents. Files in R2, memory in PostgreSQL, running on a single VPS.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23050608' stroke='%234ade80' stroke-width='1.4'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%234ade80'/%3E%3Ccircle cx='16' cy='16' r='1.6' fill='%23050608'/%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
-  <body class="bg-[#0a0a0c] text-[#f4f2ef] font-sans antialiased selection:bg-[#f5b8d0]/20 selection:text-white" style="margin:0; overflow-x:hidden;">
+  <body class="bg-[#050608] text-[#e8eaed] font-sans antialiased selection:bg-[#4ade80]/20 selection:text-white" style="margin:0; overflow-x:hidden;">
     <canvas id="particlesBg" aria-hidden="true" style="position: fixed; inset: 0px; width: 1440px; height: 1024px; z-index: -1; pointer-events: none; display: block;" data-engine="three.js r160" width="2520" height="1792"></canvas>
     <!-- Top Nav -->
-    <header style="position:fixed; top:0; left:0; right:0; z-index:60; backdrop-filter:blur(12px); background:rgba(10,10,12,0.55); border-bottom:1px solid rgba(255,255,255,0.06);">
+    <header style="position:fixed; top:0; left:0; right:0; z-index:60; backdrop-filter:blur(12px); background:rgba(5,6,8,0.55); border-bottom:1px solid rgba(255,255,255,0.06);">
       <nav class="mx-auto flex items-center justify-between px-6 py-4 max-w-[77.5rem]">
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-medium tracking-tighter uppercase text-white">
-            Nexus AI
-          </span>
+        <div class="flex items-center gap-2.5">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="13" stroke="rgba(74,222,128,0.4)" stroke-width="1.2" fill="none"/>
+            <ellipse cx="16" cy="16" rx="12" ry="3.4" stroke="rgba(34,211,238,0.45)" stroke-width="0.8" transform="rotate(-20 16 16)" fill="none"/>
+            <circle cx="16" cy="16" r="5" fill="#4ade80"/>
+            <circle cx="16" cy="16" r="1.6" fill="#050608"/>
+          </svg>
+          <span class="text-sm font-medium tracking-tighter uppercase text-white">Aether <span style="color:#4ade80">Cosmos</span> <span class="text-[#9aa3b2] normal-case tracking-normal">by AFR</span></span>
         </div>
-        <div class="hidden md:flex items-center gap-8 text-sm text-[#b8b4ae]">
+        <div class="hidden md:flex items-center gap-8 text-sm text-[#9aa3b2]">
           <a href="#cinematic" class="hover:text-white transition-colors duration-300">The System</a>
-          <a href="#collection" class="hover:text-white transition-colors duration-300">Agents</a>
-          <a href="#craft" class="hover:text-white transition-colors duration-300">Architecture</a>
+          <a href="#collection" class="hover:text-white transition-colors duration-300">Features</a>
+          <a href="#noema-board" class="hover:text-white transition-colors duration-300">Architecture</a>
         </div>
-        <button class="text-sm font-normal px-4 py-1.5 rounded-full bg-[#ededed] text-[#1a1a1a] hover:bg-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.8),_0_2px_4px_rgba(0,0,0,0.1)]">
-          Deploy Now
-        </button>
+        <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="text-sm font-normal px-4 py-1.5 rounded-full bg-[#e8eaed] text-[#050608] hover:bg-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.8),_0_2px_4px_rgba(0,0,0,0.1)]">
+          View on GitHub
+        </a>
       </nav>
     </header>
 
@@ -33,50 +39,74 @@
     <section style="position: relative; height: 820vh" id="cinematic">
       <div style="position: sticky; top: 0px; height: 100vh; width: 100%; overflow: hidden" id="pinStage">
         <style>
-          @keyframes bouquetFloat {
+          @keyframes cosmosFloat {
             0%   { transform: translateY(0); }
             50%  { transform: translateY(-1.25rem); }
             100% { transform: translateY(0); }
           }
           #bouquet {
-            animation: bouquetFloat 5s ease-in-out infinite;
+            animation: cosmosFloat 5s ease-in-out infinite;
           }
         </style>
         <canvas style="position:absolute; inset:0; width:100%; height:100%; z-index:5; opacity:0.85;" id="petalCanvas"></canvas>
 
         <div id="visualWrap" style="position: absolute; inset: 0px; z-index: 1; will-change: transform;">
-          <div id="bgLayer" style="position: absolute; inset: -8%; background-size: cover; background-position: center center; filter: saturate(0.7) brightness(0.55); will-change: transform; overflow: hidden; isolation: isolate;"></div>
+          <div id="bgLayer" style="position: absolute; inset: -8%; background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(74,222,128,0.10), transparent 65%), radial-gradient(ellipse 60% 50% at 78% 62%, rgba(34,211,238,0.08), transparent 60%), radial-gradient(ellipse 55% 45% at 22% 68%, rgba(167,139,250,0.07), transparent 55%), #050608; filter: saturate(0.9) brightness(0.9); will-change: transform; overflow: hidden; isolation: isolate;"></div>
           <div style="position: absolute; inset: 0px; display: flex; align-items: center; justify-content: center; will-change: transform" id="midLayer">
-            <style>
-              @keyframes soft-float-aura {
-                0%, 100% { transform: translateY(0px); }
-                50% { transform: translateY(-24px); }
-              }
-              .anim-float-aura {
-                animation: soft-float-aura 6s ease-in-out infinite;
-                will-change: transform;
-              }
-              @supports (animation-timeline: scroll()) {
-                @keyframes scroll-zoom-aura {
-                  0% { transform: scale(1); }
-                  100% { transform: scale(1.4); }
-                }
-                .anim-scroll-aura {
-                  animation: scroll-zoom-aura linear forwards;
-                  animation-timeline: scroll();
-                  will-change: transform;
-                }
-              }
-            </style>
-            <div class="anim-scroll-aura" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
-              <div class="anim-float-aura" style="display: flex; align-items: center; justify-content: center">
-                <div id="bouquet" class="z-40 relative" style="width: min(56vw, 40rem); aspect-ratio: 16 / 11; background-image: url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d0f628cf-26bf-473d-81b9-50e422c51521_3840w.png'); background-size: contain; background-repeat: no-repeat; background-position: center center; will-change: transform; z-index: 40;"></div>
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+              <div style="display: flex; align-items: center; justify-content: center">
+                <div id="bouquet" class="z-40 relative" style="width: min(56vw, 40rem); aspect-ratio: 16 / 11; will-change: transform; z-index: 40;">
+                  <svg viewBox="0 0 480 330" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+                    <defs>
+                      <radialGradient id="core" cx="0.4" cy="0.4">
+                        <stop offset="0%" stop-color="#4ade80"/>
+                        <stop offset="55%" stop-color="#16a34a"/>
+                        <stop offset="100%" stop-color="#0d2b1c"/>
+                      </radialGradient>
+                      <radialGradient id="coreDark" cx="0.5" cy="0.5">
+                        <stop offset="0%" stop-color="#0a0d12"/>
+                        <stop offset="100%" stop-color="#000"/>
+                      </radialGradient>
+                      <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
+                      <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+                    </defs>
+                    <!-- atmosphere -->
+                    <circle cx="240" cy="165" r="150" fill="rgba(74,222,128,0.05)" filter="url(#glow)"/>
+                    <ellipse cx="240" cy="165" rx="165" ry="56" stroke="rgba(74,222,128,0.20)" stroke-width="0.7" transform="rotate(-14 240 165)" fill="none"/>
+                    <ellipse cx="240" cy="165" rx="165" ry="56" stroke="rgba(74,222,128,0.08)" stroke-width="0.5" transform="rotate(-14 240 165)" stroke-dasharray="2 7" fill="none"/>
+                    <ellipse cx="240" cy="165" rx="205" ry="70" stroke="rgba(34,211,238,0.16)" stroke-width="0.6" transform="rotate(18 240 165)" fill="none"/>
+                    <ellipse cx="240" cy="165" rx="205" ry="70" stroke="rgba(34,211,238,0.07)" stroke-width="0.4" transform="rotate(18 240 165)" stroke-dasharray="2 8" fill="none"/>
+                    <ellipse cx="240" cy="165" rx="125" ry="42" stroke="rgba(167,139,250,0.20)" stroke-width="0.6" transform="rotate(-34 240 165)" fill="none"/>
+                    <ellipse cx="240" cy="165" rx="125" ry="42" stroke="rgba(167,139,250,0.09)" stroke-width="0.4" transform="rotate(-34 240 165)" stroke-dasharray="2 6" fill="none"/>
+                    <!-- connecting lines -->
+                    <line x1="240" y1="165" x2="415" y2="115" stroke="rgba(74,222,128,0.25)" stroke-width="0.6"/>
+                    <line x1="240" y1="165" x2="60" y2="245" stroke="rgba(34,211,238,0.25)" stroke-width="0.6"/>
+                    <line x1="240" y1="165" x2="335" y2="285" stroke="rgba(167,139,250,0.25)" stroke-width="0.6"/>
+                    <!-- orbit nodes -->
+                    <circle cx="415" cy="115" r="4" fill="#4ade80" filter="url(#soft)"/>
+                    <circle cx="415" cy="115" r="1.6" fill="#050608"/>
+                    <circle cx="60" cy="245" r="4" fill="#22d3ee" filter="url(#soft)"/>
+                    <circle cx="60" cy="245" r="1.6" fill="#050608"/>
+                    <circle cx="335" cy="285" r="4" fill="#a78bfa" filter="url(#soft)"/>
+                    <circle cx="335" cy="285" r="1.6" fill="#050608"/>
+                    <circle cx="105" cy="95" r="3" fill="#4ade80" opacity="0.8"/>
+                    <circle cx="370" cy="215" r="3" fill="#22d3ee" opacity="0.8"/>
+                    <!-- planet -->
+                    <circle cx="240" cy="165" r="82" fill="url(#coreDark)"/>
+                    <circle cx="240" cy="165" r="82" fill="url(#core)" opacity="0.96"/>
+                    <path d="M 195 140 Q 210 132, 228 142 T 262 152 Q 275 168, 258 178 Q 240 186, 222 176 Q 204 164, 195 150 Z" fill="rgba(0,40,15,0.35)"/>
+                    <path d="M 280 175 Q 296 172, 306 184 Q 300 202, 282 196 Z" fill="rgba(0,40,15,0.30)"/>
+                    <path d="M 205 192 Q 218 204, 240 201 Q 252 208, 246 214 Q 222 220, 210 208 Z" fill="rgba(0,40,15,0.30)"/>
+                    <path d="M 212 118 Q 222 112, 232 118 T 250 124" stroke="rgba(232,234,237,0.5)" stroke-width="1" fill="none"/>
+                    <ellipse cx="240" cy="165" rx="82" ry="82" stroke="rgba(255,255,255,0.06)" stroke-width="0.6" fill="none"/>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="gradeWash" style="position: absolute; inset: 0px; z-index: 6; pointer-events: none; background: radial-gradient(circle at 50% 45%, rgba(245, 184, 208, 0.1), rgba(10, 10, 12, 0.75) 70%); mix-blend-mode: screen;"></div>
+        <div id="gradeWash" style="position: absolute; inset: 0px; z-index: 6; pointer-events: none; background: radial-gradient(circle at 50% 45%, rgba(74,222,128,0.08), rgba(5,6,8,0.78) 70%); mix-blend-mode: screen;"></div>
 
         <div id="lbTop" style="position: absolute; top: 0px; left: 0px; right: 0px; height: 0.000314vh; background: rgb(0, 0, 0); z-index: 20; will-change: height;"></div>
         <div id="lbBot" style="position: absolute; bottom: 0px; left: 0px; right: 0px; height: 0.000314vh; background: rgb(0, 0, 0); z-index: 20; will-change: height;"></div>
@@ -90,88 +120,153 @@
 
         <div style="position: absolute; inset: 0px; z-index: 40; display: flex; align-items: center; justify-content: center; pointer-events: none;">
           <div class="beat flex flex-col items-center" data-beat="0" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <p class="text-xs uppercase" style="letter-spacing:0.35rem; color:#f5b8d0; margin-bottom:1rem;">Version No. 07</p>
-            <h1 class="tracking-tight" style="font-size:clamp(2.5rem,8vw,6rem); line-height:0.95; font-weight:500;">Quiet Nodes,<br>Waiting Data</h1>
+            <p class="text-xs uppercase" style="letter-spacing:0.35rem; color:#4ade80; margin-bottom:1rem;">v0.4.0 · Self-hosted</p>
+            <h1 class="tracking-tight" style="font-size:clamp(2.5rem,8vw,6rem); line-height:0.95; font-weight:500;">Your files.<br>Your memory.<br><em style="font-style:normal; color:#4ade80;">Your agents.</em></h1>
           </div>
           <div class="beat flex flex-col items-center" data-beat="1" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">The First Boot</h2>
-            <p class="text-sm mt-4 text-[#c9c4bd]" style="max-width:27.5rem;">Algorithms unfold as raw data moves through the neural network.</p>
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">The First Boot</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Files in Cloudflare R2</h2>
+            <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:27.5rem;">Multipart uploads, versions, recycle bin, full-text search — encrypted end-to-end before they leave your browser.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="2" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#f5b8d0; margin-bottom:0.75rem;">The Initialization</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Connected Swarms</h2>
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">The Initialization</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Memory in PostgreSQL</h2>
+            <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">A Second Brain knowledge graph that survives every model change. Your memory stays yours.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="3" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">A Full Cluster</h2>
-            <p class="text-sm mt-4 text-[#c9c4bd]" style="max-width:26.25rem;">Forty-two autonomous agents, architected to scale from every angle.</p>
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">A Full Cluster</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Agents on MCP</h2>
+            <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">Thirty-two tools over HTTP. Any agent, any model — connected to your knowledge.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="4" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#f5b8d0; margin-bottom:0.75rem;">Data Lift</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Carried by Cloud</h2>
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">Data Lift</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">One VPS</h2>
+            <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">Docker Compose, Nginx, Certbot. The whole cosmos on a single server you control.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="5" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Into the Stream</h2>
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">Into the Stream</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">One Command Deploy</h2>
+            <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">A single setup script on a fresh Ubuntu VPS. Installs, builds, issues the certificate, health-checks.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="6" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
-            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#f5b8d0; margin-bottom:0.75rem;">Deployed Live</p>
-            <h2 class="tracking-tight uppercase" style="font-size:clamp(2.375rem,8vw,5.625rem); line-height:1; font-weight:500;">Nexus AI</h2>
-            <p class="text-sm mt-4 text-[#c9c4bd]">System active — explore the agents below.</p>
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#4ade80; margin-bottom:0.75rem;">Deployed Live</p>
+            <h2 class="tracking-tight uppercase" style="font-size:clamp(2.375rem,8vw,5.625rem); line-height:1; font-weight:500;">Aether <span style="color:#4ade80">Cosmos</span></h2>
+            <p class="text-sm mt-4 text-[#9aa3b2]">System active — explore what's inside.</p>
           </div>
         </div>
 
         <div style="position: absolute; left: 2rem; bottom: 3.5rem; z-index: 45; display: flex; align-items: center; gap: 1rem;">
           <div id="timelineTrack" style="width:11.25rem; height:0.1875rem; border-radius:0.1875rem; background:rgba(255,255,255,0.16); overflow:hidden;">
-            <div id="timelineFill" style="height: 100%; width: 0%; background: linear-gradient(90deg, rgb(245, 184, 208), rgb(194, 106, 151));"></div>
+            <div id="timelineFill" style="height: 100%; width: 0%; background: linear-gradient(90deg, rgb(74, 222, 128), rgb(34, 211, 238));"></div>
           </div>
-          <span id="timeLabel" class="text-xs tabular-nums text-[#b8b4ae]">0.00s</span>
+          <span id="timeLabel" class="text-xs tabular-nums text-[#9aa3b2]">0.00s</span>
         </div>
 
         <div style="position: absolute; right: 2rem; bottom: 3.5rem; z-index: 45; display: flex; gap: 0.625rem;" id="dotRow"></div>
       </div>
     </section>
 
-    <!-- COLLECTION SECTION -->
+    <!-- COLLECTION SECTION — FEATURES -->
     <section id="collection" class="mx-auto px-6 py-24 max-w-[77.5rem] relative overflow-hidden">
       <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 9px); pointer-events:none;"></div>
 
       <div class="reveal-line overflow-hidden">
-        <p class="text-xs uppercase text-[#f5b8d0]" style="letter-spacing:0.3rem;">The Agents</p>
+        <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">The Cosmos</p>
       </div>
       <div class="reveal-line overflow-hidden mt-3">
-        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;" data-scroll-word="true">Autonomous systems built to scale with data</h2>
+        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;" data-scroll-word="true">A self-hosted universe for your files and your agents</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+        <!-- Card 1 — Second Brain -->
         <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
-          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4dd5a8b0-2d0d-44eb-ae24-75a4345db5ac_3840w.png'); background-size:cover; background-position:center;"></div>
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background:radial-gradient(circle at 30% 30%, rgba(74,222,128,0.22), transparent 55%), radial-gradient(circle at 75% 70%, rgba(34,211,238,0.14), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+              <defs>
+                <radialGradient id="n1" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#0d2b1c"/></radialGradient>
+                <filter id="nglow"><feGaussianBlur stdDeviation="6"/></filter>
+              </defs>
+              <g stroke="rgba(74,222,128,0.30)" stroke-width="0.8">
+                <line x1="200" y1="250" x2="80" y2="140"/><line x1="200" y1="250" x2="320" y2="120"/><line x1="200" y1="250" x2="90" y2="370"/>
+                <line x1="200" y1="250" x2="310" y2="380"/><line x1="200" y1="250" x2="200" y2="70"/><line x1="200" y1="250" x2="200" y2="440"/>
+                <line x1="80" y1="140" x2="200" y2="70"/><line x1="320" y1="120" x2="200" y2="70"/><line x1="90" y1="370" x2="310" y2="380"/>
+              </g>
+              <g fill="#050608" stroke="#4ade80" stroke-width="1.4">
+                <circle cx="200" cy="250" r="22" fill="url(#n1)"/>
+                <circle cx="80" cy="140" r="8" fill="url(#n1)"/>
+                <circle cx="320" cy="120" r="8" fill="url(#n1)"/>
+                <circle cx="90" cy="370" r="8" fill="url(#n1)"/>
+                <circle cx="310" cy="380" r="8" fill="url(#n1)"/>
+                <circle cx="200" cy="70" r="8" fill="url(#n1)"/>
+                <circle cx="200" cy="440" r="8" fill="url(#n1)"/>
+              </g>
+              <circle cx="200" cy="250" r="34" stroke="rgba(74,222,128,0.35)" stroke-width="0.8" fill="none" filter="url(#nglow)"/>
+            </svg>
+          </div>
           <div class="flex flex-col flex-grow justify-between">
             <div>
-              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8e6e3]">Data Harvester</h3>
-              <p class="text-sm mt-1.5 text-[#9c988f]">High-frequency extraction for real-time insights.</p>
+              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8eaed]">Second Brain</h3>
+              <p class="text-sm mt-1.5 text-[#9aa3b2]">Versioned memories and an interactive knowledge graph your agents actually remember.</p>
             </div>
-            <p class="text-sm mt-4 font-normal text-[#f5b8d0]">$780/mo</p>
+            <p class="text-sm mt-4 font-normal text-[#4ade80]">Memory · Knowledge graph</p>
           </div>
         </div>
 
+        <!-- Card 2 — Secure Files -->
         <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
-          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d898f02c-0397-49fe-9aca-cab19a5582c5_3840w.png'); background-size:cover; background-position:center;"></div>
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background:radial-gradient(circle at 30% 30%, rgba(34,211,238,0.20), transparent 55%), radial-gradient(circle at 75% 70%, rgba(74,222,128,0.12), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+              <defs>
+                <radialGradient id="n2" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#0b2430"/></radialGradient>
+                <filter id="nglow2"><feGaussianBlur stdDeviation="6"/></filter>
+              </defs>
+              <ellipse cx="200" cy="250" rx="150" ry="60" stroke="rgba(34,211,238,0.25)" stroke-width="0.8" transform="rotate(-12 200 250)" fill="none"/>
+              <ellipse cx="200" cy="250" rx="150" ry="60" stroke="rgba(34,211,238,0.10)" stroke-width="0.6" transform="rotate(-12 200 250)" stroke-dasharray="2 7" fill="none"/>
+              <ellipse cx="200" cy="250" rx="180" ry="72" stroke="rgba(74,222,128,0.16)" stroke-width="0.6" transform="rotate(16 200 250)" fill="none"/>
+              <line x1="200" y1="250" x2="348" y2="205" stroke="rgba(34,211,238,0.3)" stroke-width="0.8"/>
+              <line x1="200" y1="250" x2="52" y2="290" stroke="rgba(74,222,128,0.3)" stroke-width="0.8"/>
+              <circle cx="200" cy="250" r="42" fill="#050608" stroke="#22d3ee" stroke-width="1.6"/>
+              <path d="M 182 260 a 20 20 0 0 1 14 -24 a 24 24 0 0 1 44 6 a 18 18 0 0 1 8 34 l -8 4 h -56 z" fill="url(#n2)"/>
+              <circle cx="348" cy="205" r="6" fill="#22d3ee" filter="url(#nglow2)"/>
+              <circle cx="52" cy="290" r="6" fill="#4ade80" filter="url(#nglow2)"/>
+              <rect x="162" y="238" width="76" height="46" rx="8" stroke="rgba(232,234,237,0.5)" stroke-width="1" fill="none"/>
+            </svg>
+          </div>
           <div class="flex flex-col flex-grow justify-between">
             <div>
-              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8e6e3]">Neural Orchestrator</h3>
-              <p class="text-sm mt-1.5 text-[#9c988f]">Dynamic load balancing that shifts with any traffic.</p>
+              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8eaed]">Secure Files</h3>
+              <p class="text-sm mt-1.5 text-[#9aa3b2]">R2-backed storage with end-to-end encryption, versions, recycle bin, and ranked search.</p>
             </div>
-            <p class="text-sm mt-4 font-normal text-[#f5b8d0]">$940/mo</p>
+            <p class="text-sm mt-4 font-normal text-[#22d3ee]">Storage · E2E encryption</p>
           </div>
         </div>
 
+        <!-- Card 3 — MCP Server -->
         <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
-          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/25d0ce5e-7521-4346-900f-d2ff2902bd46_3840w.png'); background-size:cover; background-position:center;"></div>
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background:radial-gradient(circle at 30% 30%, rgba(167,139,250,0.20), transparent 55%), radial-gradient(circle at 75% 70%, rgba(34,211,238,0.12), transparent 50%), #0a0d12;">
+            <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+              <defs>
+                <radialGradient id="n3" cx="0.4" cy="0.4"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#241b4d"/></radialGradient>
+                <filter id="nglow3"><feGaussianBlur stdDeviation="6"/></filter>
+              </defs>
+              <g stroke="rgba(167,139,250,0.30)" stroke-width="0.8">
+                <line x1="200" y1="120" x2="90" y2="350"/><line x1="200" y1="120" x2="310" y2="350"/>
+                <line x1="90" y1="350" x2="310" y2="350"/><line x1="200" y1="120" x2="200" y2="390"/>
+                <line x1="90" y1="350" x2="200" y2="390"/><line x1="310" y1="350" x2="200" y2="390"/>
+              </g>
+              <circle cx="200" cy="120" r="24" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.6"/>
+              <circle cx="90" cy="350" r="16" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.4"/>
+              <circle cx="310" cy="350" r="16" fill="url(#n3)" stroke="#a78bfa" stroke-width="1.4"/>
+              <circle cx="200" cy="390" r="12" fill="url(#n3)" stroke="#22d3ee" stroke-width="1.2"/>
+              <circle cx="200" cy="120" r="36" stroke="rgba(167,139,250,0.35)" stroke-width="0.8" fill="none" filter="url(#nglow3)"/>
+            </svg>
+          </div>
           <div class="flex flex-col flex-grow justify-between">
             <div>
-              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8e6e3]">Logic Synthesizer</h3>
-              <p class="text-sm mt-1.5 text-[#9c988f]">Statement deployment, forty-two simultaneous models.</p>
+              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8eaed]">MCP Server</h3>
+              <p class="text-sm mt-1.5 text-[#9aa3b2]">Thirty-two tools over HTTP. Any agent, any model — the memory stays yours.</p>
             </div>
-            <p class="text-sm mt-4 font-normal text-[#f5b8d0]">$1,260/mo</p>
+            <p class="text-sm mt-4 font-normal text-[#a78bfa]">Agents · 32 MCP tools</p>
           </div>
         </div>
       </div>
@@ -179,13 +274,13 @@
 
     <!-- CRAFT PARALLAX STRIP -->
     <section id="craft" class="relative overflow-hidden flex items-center" style="height:70vh;">
-      <div id="craftBg" class="absolute inset-[-15%] bg-cover bg-center will-change-transform" style="background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cf973fee-26dd-4029-b42e-26dfa75c7417_3840w.png'); filter:brightness(0.35) saturate(0.8);"></div>
+      <div id="craftBg" class="absolute inset-[-15%] bg-cover bg-center will-change-transform" style="background: radial-gradient(ellipse 60% 70% at 25% 50%, rgba(74,222,128,0.12), transparent 60%), radial-gradient(ellipse 55% 65% at 80% 55%, rgba(167,139,250,0.12), transparent 60%), #0a0d12; filter:brightness(0.9) saturate(0.9);"></div>
       <div class="mx-auto px-6 max-w-[77.5rem] relative z-10">
         <div class="reveal-line overflow-hidden">
-          <h2 class="tracking-tight text-white" style="font-size:clamp(1.75rem,5vw,3.25rem); font-weight:500; max-width:40rem; line-height:1.1;">Every algorithm is optimized by hand, the moment it compiles.</h2>
+          <h2 class="tracking-tight text-white" style="font-size:clamp(1.75rem,5vw,3.25rem); font-weight:500; max-width:40rem; line-height:1.1;">Your server can die. Your model can change. <span style="color:#4ade80">Your Brain stays yours.</span></h2>
         </div>
-        <a href="#" class="inline-flex items-center gap-2 mt-8 text-sm font-medium px-5 py-2.5 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors backdrop-blur-md">
-          Explore our architecture
+        <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-8 text-sm font-medium px-5 py-2.5 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors backdrop-blur-md">
+          Explore the architecture
           <iconify-icon icon="solar:arrow-right-linear" width="1rem"></iconify-icon>
         </a>
       </div>
@@ -193,101 +288,100 @@
 
     <section id="integration" class="mx-auto px-6 py-24 max-w-[77.5rem] relative">
       <div class="reveal-line overflow-hidden">
-        <p class="text-xs uppercase text-[#f5b8d0]" style="letter-spacing:0.3rem;">Integration</p>
+        <p class="text-xs uppercase text-[#4ade80]" style="letter-spacing:0.3rem;">The Stack</p>
       </div>
       <div class="reveal-line overflow-hidden mt-3">
-        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">Deploy seamlessly across your stack</h2>
+        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">Built on a serious foundation</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
         <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-10 py-10">
-          <iconify-icon icon="solar:server-square-linear" width="2.5rem" class="text-[#f5b8d0] mb-6"></iconify-icon>
-          <h3 class="text-xl font-medium tracking-tight text-[#e8e6e3] mb-2">Enterprise API</h3>
-          <p class="text-sm text-[#9c988f]">Connect your infrastructure directly to our neural clusters with a single API key. Highly scalable, sub-millisecond latency.</p>
+          <iconify-icon icon="solar:atom-linear" width="2.5rem" class="text-[#4ade80] mb-6"></iconify-icon>
+          <h3 class="text-xl font-medium tracking-tight text-[#e8eaed] mb-2">Next.js 16 · React 19</h3>
+          <p class="text-sm text-[#9aa3b2]">App Router, strict TypeScript, Tailwind CSS v4, Radix UI, Framer Motion. 3,422 tests — vetted end to end.</p>
         </div>
         <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-10 py-10">
-          <iconify-icon icon="solar:cloud-network-linear" width="2.5rem" class="text-[#f5b8d0] mb-6"></iconify-icon>
-          <h3 class="text-xl font-medium tracking-tight text-[#e8e6e3] mb-2">Cloud Native</h3>
-          <p class="text-sm text-[#9c988f]">Deploy edge nodes directly inside your AWS, GCP, or Azure environments. Keep your data localized and compliant.</p>
+          <iconify-icon icon="solar:database-linear" width="2.5rem" class="text-[#22d3ee] mb-6"></iconify-icon>
+          <h3 class="text-xl font-medium tracking-tight text-[#e8eaed] mb-2">PostgreSQL · Redis · R2</h3>
+          <p class="text-sm text-[#9aa3b2]">Drizzle ORM, BullMQ queues, full-text search, Argon2id sessions with TOTP 2FA. Cloudflare R2 object storage.</p>
         </div>
       </div>
     </section>
 
-    <section id="noema-manifesto" style="position:relative; min-height:100vh; background:#f4efe7; color:#050505; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:6rem 1.25rem; font-family:'Inter',sans-serif;">
-      <div style="position:absolute; inset:0; background:radial-gradient(circle at 20% 30%, rgba(79,70,229,0.24), transparent 32%), radial-gradient(circle at 80% 72%, rgba(244,63,94,0.22), transparent 30%);"></div>
+    <section id="noema-manifesto" style="position:relative; min-height:100vh; background:#e8eaed; color:#050505; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:6rem 1.25rem; font-family:'Inter',sans-serif;">
+      <div style="position:absolute; inset:0; background:radial-gradient(circle at 20% 30%, rgba(74,222,128,0.28), transparent 32%), radial-gradient(circle at 80% 72%, rgba(167,139,250,0.26), transparent 30%);"></div>
       <div style="position:relative; z-index:10; max-width:min(1180px,92vw); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.18em 0.28em; text-align:center;">
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Everything</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">your</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">autonomous</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">network</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">needs,</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">deployed</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">into</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">one</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">unified</span>
-        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">ecosystem.</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Your</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">files.</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Your</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">memory.</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Your</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">agents.</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">One</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">self-hosted</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">cosmos.</span>
       </div>
-      <p style="position:absolute; left:1.25rem; bottom:1.25rem; z-index:10; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; color:rgba(0,0,0,0.6);">04 / Architecture</p>
+      <p style="position:absolute; left:1.25rem; bottom:1.25rem; z-index:10; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; color:rgba(0,0,0,0.6);">01 / The Cosmos</p>
     </section>
 
-    <section id="noema-board" style="position:relative; min-height:100vh; color:#050505; overflow:hidden; padding:7rem 1.25rem 4rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
-      <h2 style="position:absolute; z-index:0; color:rgba(0,0,0,0.18); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:50%; transform:translate(-50%,-50%);">MODELS</h2>
+    <section id="noema-board" style="position:relative; min-height:100vh; color:#e8eaed; overflow:hidden; padding:7rem 1.25rem 4rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
+      <h2 style="position:absolute; z-index:0; color:rgba(255,255,255,0.05); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:50%; transform:translate(-50%,-50%);">BRAIN</h2>
       <div style="position:relative; z-index:10; width:100%; max-width:72rem; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.75rem;">
-        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#050505; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#0a0d12; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Deployment</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Cluster Alpha:<br>Online</h3>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Storage</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Cloudflare R2<br>Backed</h3>
           </div>
           <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
-            <span>US-East<br>99.9% Uptime</span>
+            <span>S3-compatible<br>Multipart uploads</span>
           </div>
         </article>
-        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#050505; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#0a0d12; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Processing</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Neural Node<br>Active</h3>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Memory</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Knowledge<br>Graph</h3>
           </div>
           <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
-            <span>EU-Central<br>12ms Ping</span>
+            <span>PostgreSQL<br>Hybrid retrieval</span>
           </div>
         </article>
-        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#050505; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#0a0d12; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Training</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Deep Learning<br>Epoch 42</h3>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Agents</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">MCP Server<br>Live</h3>
           </div>
           <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
-            <span>Global<br>Continuous</span>
+            <span>32 tools · HTTP<br>Model-agnostic</span>
           </div>
         </article>
-        <article style="min-height:158px; border:1px solid rgba(0,0,0,0.2); background:#F43F5E; color:#050505; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <article style="min-height:158px; border:1px solid rgba(0,0,0,0.2); background:#4ade80; color:#050505; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(0,0,0,0.55);">Security</p>
-            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Zero-Trust<br>Firewall</h3>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">E2E<br>Encryption</h3>
           </div>
           <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(0,0,0,0.65);">
-            <span>US-West<br>Protected</span>
+            <span>Argon2id · 2FA<br>Zero-trust</span>
           </div>
         </article>
       </div>
     </section>
 
     <section id="noema-support" style="position:relative; min-height:100vh; background:#000000; color:white; overflow:hidden; padding:0 1.25rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
-      <h2 style="position:absolute; z-index:0; color:rgba(0,0,0,0.35); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:46%; transform:translate(-50%,-50%);">SCALE</h2>
+      <h2 style="position:absolute; z-index:0; color:rgba(255,255,255,0.04); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:46%; transform:translate(-50%,-50%);">YOURS</h2>
       <div style="position: relative; z-index: 10; width: 100%; max-width: 72rem; margin: 0px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; padding: 5rem 0px;">
-        <article style="border:1px solid rgba(255,255,255,0.28); background:#050505; color:white; min-height:310px; padding:1.25rem;">
-          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">01 / Ingestion</p>
-          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">COLLECTED</h3>
-          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">Raw data is securely ingested from enterprise edge nodes instantly.</p>
+        <article style="border:1px solid rgba(255,255,255,0.28); background:#050608; color:white; min-height:310px; padding:1.25rem;">
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">01 / Files</p>
+          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">STORED</h3>
+          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">Upload, share, version, search — encrypted in your browser before the server ever sees it.</p>
         </article>
-        <article style="border:1px solid rgba(0,0,0,0.1); background:white; color:#050505; min-height:310px; padding:1.25rem;">
-          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(0,0,0,0.45);">02 / Synthesis</p>
-          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">PROCESSED</h3>
-          <button style="margin-top: 2rem; width: 100%; background: rgb(5, 5, 5); color: white; font-size: 0.875rem; font-weight: 500; padding: 0.75rem; border: medium; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">View Metrics</button>
+        <article style="border:1px solid rgba(74,222,128,0.35); background:#4ade80; color:#050505; min-height:310px; padding:1.25rem;">
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(0,0,0,0.55);">02 / Memory</p>
+          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">REMEMBERED</h3>
+          <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" style="margin-top: 2rem; width: 100%; background: rgb(5, 5, 5); color: white; font-size: 0.875rem; font-weight: 500; padding: 0.75rem; border: medium; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration:none;">View the source</a>
         </article>
-        <article style="border:1px solid rgba(255,255,255,0.28); background:#050505; color:white; min-height:310px; padding:1.25rem;">
-          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">03 / Output</p>
+        <article style="border:1px solid rgba(255,255,255,0.28); background:#050608; color:white; min-height:310px; padding:1.25rem;">
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">03 / Agents</p>
           <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">DEPLOYED</h3>
-          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">Actionable insights deployed directly into your operational pipelines.</p>
+          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">MCP over HTTP — any agent keeps your memory, in your own universe.</p>
         </article>
       </div>
     </section>
@@ -296,24 +390,24 @@
     <footer class="mx-auto px-6 py-16 max-w-[77.5rem] border-t border-white/[0.06]">
       <div class="flex flex-col md:flex-row justify-between gap-10">
         <div>
-          <span class="text-sm font-medium tracking-tighter uppercase text-white">Nexus AI</span>
-          <p class="text-sm mt-4 text-[#7d7a73]" style="max-width:17.5rem;">Cinematic AI agent experiences, deployed instantly across the cloud.</p>
+          <span class="text-sm font-medium tracking-tighter uppercase text-white">Aether Cosmos <span style="color:#4ade80">by AFR</span></span>
+          <p class="text-sm mt-4 text-[#7d7a73]" style="max-width:17.5rem;">Self-hosted cloud storage with a Second Brain knowledge layer for AI agents. v0.4.0.</p>
         </div>
-        <div class="flex gap-16 text-sm text-[#9c988f]">
+        <div class="flex gap-16 text-sm text-[#9aa3b2]">
           <div class="flex flex-col gap-3">
-            <a href="#" class="hover:text-white transition-colors">Deploy</a>
-            <a href="#" class="hover:text-white transition-colors">Clusters</a>
-            <a href="#" class="hover:text-white transition-colors">Enterprise</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" class="hover:text-white transition-colors">GitHub</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/README.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Documentation</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/deployment.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Deployment</a>
           </div>
           <div class="flex flex-col gap-3">
-            <a href="#" class="hover:text-white transition-colors">Documentation</a>
-            <a href="#" class="hover:text-white transition-colors">Changelog</a>
-            <a href="#" class="hover:text-white transition-colors">API</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/features.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Features</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/second-brain.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">Second Brain</a>
+            <a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/api-reference.md" target="_blank" rel="noopener" class="hover:text-white transition-colors">API</a>
           </div>
         </div>
       </div>
       <div class="mt-16 flex items-center justify-between">
-        <p class="text-xs text-[#5c5a55]">© 2026 Nexus AI. All rights reserved.</p>
+        <p class="text-xs text-[#5c5a55]">© 2026 Aether Cosmos ByAFR. All rights reserved.</p>
       </div>
     </footer>
 
@@ -350,8 +444,8 @@
             const size = p.r * devicePixelRatio * (0.7 + petalDensity*0.8);
             ctx.globalAlpha = p.a * petalDensity;
             const g = ctx.createRadialGradient(px, py, 0, px, py, size);
-            g.addColorStop(0, 'rgba(247,196,218,0.9)');
-            g.addColorStop(1, 'rgba(194,106,151,0)');
+            g.addColorStop(0, 'rgba(74,222,128,0.9)');
+            g.addColorStop(1, 'rgba(34,211,238,0)');
             ctx.fillStyle = g;
             ctx.beginPath();
             ctx.ellipse(px, py, size, size*0.6, p.drift + t*0.0002, 0, Math.PI*2);
@@ -441,7 +535,7 @@
             b.el.style.opacity = o.toFixed(3);
             b.el.style.transform = `translateY(${(1-o)*18}px)`;
             const active = p >= b.s && p <= b.e;
-            b.dot.style.background = active ? '#f5b8d0' : 'rgba(255,255,255,0.25)';
+            b.dot.style.background = active ? '#4ade80' : 'rgba(255,255,255,0.25)';
             b.dot.style.transform = active ? 'scale(1.4)' : 'scale(1)';
           });
 
@@ -547,7 +641,7 @@
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.1;
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color('#0a0a0c');
+      scene.background = new THREE.Color('#050608');
       const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
       camera.position.z = 14.5;
       const geo = new THREE.BufferGeometry();
@@ -555,7 +649,7 @@
       geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
       geo.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
       geo.setAttribute('aRing', new THREE.BufferAttribute(ringId, 1));
-      const uniforms = { uTime: { value: 0 }, uSize: { value: 3.0 }, uPixelRatio: { value: pr }, uOpacity: { value: 0.8 }, uColor: { value: new THREE.Color('#f5b8d0') }, uCore: { value: new THREE.Color('#ffd9e8') }, uRing0: { value: new THREE.Color('#c26a97') }, uRing1: { value: new THREE.Color('#f5b8d0') }, uRing2: { value: new THREE.Color('#ffe3ef') } };
+      const uniforms = { uTime: { value: 0 }, uSize: { value: 3.0 }, uPixelRatio: { value: pr }, uOpacity: { value: 0.8 }, uColor: { value: new THREE.Color('#4ade80') }, uCore: { value: new THREE.Color('#86efac') }, uRing0: { value: new THREE.Color('#22d3ee') }, uRing1: { value: new THREE.Color('#4ade80') }, uRing2: { value: new THREE.Color('#a78bfa') } };
       const mat = new THREE.ShaderMaterial({ uniforms, vertexShader: VERT, fragmentShader: FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
       const group = new THREE.Group();
       group.add(new THREE.Points(geo, mat));
@@ -654,7 +748,7 @@
       gsap.to('#noema-support h2',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'#noema-support',start:'top bottom',end:'bottom top',scrub:1}});
       gsap.utils.toArray('#noema-support article').forEach(function(a,i){gsap.fromTo(a,{y:90,rotateX:8,autoAlpha:0,transformPerspective:900},{y:0,rotateX:0,autoAlpha:1,duration:0.9,ease:'power3.out',delay:i*0.1,scrollTrigger:{trigger:'#noema-support',start:'top 72%'}});});
       gsap.fromTo('footer > div',{y:40,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power2.out',scrollTrigger:{trigger:'footer',start:'top 90%'}});
-      var mag=document.querySelectorAll('nav a, nav button, #craft a, #noema-support button, footer a');
+      var mag=document.querySelectorAll('nav a, nav button, #craft a, #noema-support a, footer a');
       mag.forEach(function(el){el.style.willChange='transform';el.style.display=el.style.display||'inline-flex';el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect();var mx=(e.clientX-r.left-r.width/2)/r.width;var my=(e.clientY-r.top-r.height/2)/r.height;gsap.to(el,{x:mx*6,y:my*4,duration:0.4,ease:'power2.out'});});el.addEventListener('mouseleave',function(){gsap.to(el,{x:0,y:0,duration:0.5,ease:'elastic.out(1,0.4)'});});});
       document.querySelectorAll('#dotRow span').forEach(function(d){d.addEventListener('mouseenter',function(){gsap.to(d,{scale:1.8,duration:0.3,ease:'back.out(2)'});});d.addEventListener('mouseleave',function(){gsap.to(d,{scale:1,duration:0.3});});});
       }if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
