@@ -1,1328 +1,663 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aether Cosmos ByAFR — Self-hosted cloud with a Second Brain for AI agents</title>
-  <meta name="description" content="Aether Cosmos is self-hosted cloud storage with a Second Brain knowledge layer for AI agents. Files in R2, memory in PostgreSQL, runs on a single VPS." />
-  <meta name="theme-color" content="#050608" />
-  <meta property="og:title" content="Aether Cosmos ByAFR" />
-  <meta property="og:description" content="Self-hosted cloud with a Second Brain for AI agents." />
-  <meta property="og:type" content="website" />
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/AFR-projection/Aether-Cosmos/main/public/icons/icon-192.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@200;300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    /* ============================================================
-       AETHER COSMOS — Design System
-       Fusion: SpaceX (cinematic aerospace) + Linear (dark precision)
-       + Stripe (typed hierarchy) + cosmic green accent
-       ============================================================ */
-
-    :root {
-      /* Cosmos palette — match Aether Cosmos dark tokens */
-      --ink-0: #0b0d14;       /* deepest space */
-      --ink-1: #11131e;       /* base */
-      --ink-2: #151721;       /* raised surface */
-      --ink-3: #1a1d2b;       /* panel */
-      --ink-4: #23273a;       /* border-ish */
-      --line: rgba(255,255,255,0.06);
-      --line-strong: rgba(255,255,255,0.12);
-      --line-bright: rgba(255,255,255,0.22);
-
-      /* Spectral text */
-      --text: #f1f5f9;
-      --text-dim: #b0bed4;
-      --text-muted: #8794ab;
-      --text-faint: #64748b;
-
-      /* Brand */
-      --accent: #818cf8;       /* indigo */
-      --accent-2: #22d3ee;     /* cyan */
-      --accent-soft: rgba(129,140,248,0.12);
-      --accent-line: rgba(129,140,248,0.35);
-      --accent-glow: rgba(129,140,248,0.20);
-
-      /* Type scale */
-      --f-display: 'Sora', 'Space Grotesk', system-ui, sans-serif;
-      --f-sans: 'Inter', system-ui, sans-serif;
-      --f-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
-      --f-space: 'Space Grotesk', 'Sora', system-ui, sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; background: var(--ink-0); color: var(--text); font-family: var(--f-sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
-    body { min-height: 100vh; font-feature-settings: 'ss01', 'cv11'; }
-    a { color: inherit; text-decoration: none; }
-    code, .mono { font-family: var(--f-mono); }
-
-    /* Selection */
-    ::selection { background: var(--accent); color: var(--ink-0); }
-
-    /* ============================================================
-       WebGL canvas
-       ============================================================ */
-    #cosmos-canvas {
-      position: fixed; inset: 0; width: 100vw; height: 100vh;
-      z-index: 0; display: block; pointer-events: none;
-    }
-    #cosmos-canvas.fallback {
-      background:
-        radial-gradient(ellipse at 18% 8%, rgba(129,140,248,0.08), transparent 45%),
-        radial-gradient(ellipse at 82% 28%, rgba(34,211,238,0.06), transparent 45%),
-        radial-gradient(ellipse at 50% 95%, rgba(120,80,200,0.05), transparent 50%),
-        #050608;
-    }
-
-    /* Vignette + grain */
-    .vignette { position: fixed; inset: 0; pointer-events: none; z-index: 2; box-shadow: inset 0 0 220px rgba(0,0,0,0.7); }
-    .grain { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0.03; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>"); }
-
-    .layer { position: relative; z-index: 1; }
-
-    /* ============================================================
-       NAV
-       ============================================================ */
-    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: all 300ms ease; }
-    .nav.scrolled { background: rgba(5,6,8,0.7); backdrop-filter: blur(24px) saturate(150%); -webkit-backdrop-filter: blur(24px) saturate(150%); border-bottom: 1px solid var(--line); }
-    .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 32px; height: 64px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
-    .brand { display: flex; align-items: center; gap: 10px; font-family: var(--f-display); font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
-    .brand-mark { width: 24px; height: 24px; }
-    .nav-links { display: none; gap: 32px; font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); }
-    .nav-links a { transition: color 200ms; position: relative; padding: 4px 0; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a.active { color: var(--text); }
-    .nav-links a.active::after {
-      content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px;
-      background: var(--accent);
-    }
-    .nav-links .num { color: var(--text-faint); margin-right: 6px; }
-    .nav-cta { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
-    @media (min-width: 860px) { .nav-links { display: flex; } }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      height: 38px; padding: 0 16px; border-radius: 999px;
-      font-family: var(--f-sans); font-size: 13.5px; font-weight: 500;
-      transition: all 200ms ease;
-      cursor: pointer; border: 1px solid transparent;
-      white-space: nowrap; letter-spacing: -0.005em;
-    }
-    .btn-primary {
-      background: var(--accent); color: var(--ink-0);
-      font-weight: 600;
-    }
-    .btn-primary:hover { background: #6ff0a4; transform: translateY(-1px); box-shadow: 0 10px 30px -10px var(--accent-glow); }
-    .btn-ghost { background: transparent; color: var(--text); border-color: var(--line-strong); }
-    .btn-ghost:hover { border-color: var(--line-bright); background: rgba(255,255,255,0.03); }
-    .btn-icon { width: 38px; padding: 0; justify-content: center; }
-    .btn-lg { height: 52px; padding: 0 26px; font-size: 15px; }
-    .btn .arrow { transition: transform 200ms; }
-    .btn:hover .arrow { transform: translateX(3px); }
-
-    /* ============================================================
-       HERO — asymmetric, full-viewport
-       ============================================================ */
-    .hero { min-height: 100vh; min-height: 100svh; position: relative; display: flex; align-items: center; padding: 88px 32px 48px; }
-    @media (min-width: 1024px) { .hero { padding: 96px 32px 52px; } }
-    @media (max-width: 760px) { .hero { align-items: flex-start; padding: 72px 20px 28px; } }
-    .hero::before {
-      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-      background:
-        radial-gradient(ellipse 800px 500px at 20% 40%, rgba(5,6,8,0.75), transparent 70%),
-        radial-gradient(ellipse 600px 400px at 80% 60%, rgba(5,6,8,0.4), transparent 70%);
-    }
-    .hero-grid { max-width: 1320px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr; gap: 42px; align-items: center; }
-    @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 72px; } }
-
-    .hero-left { max-width: 760px; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--f-mono); font-size: 11px; text-transform: uppercase;
-      letter-spacing: 0.14em; color: var(--accent);
-      padding: 6px 12px 6px 8px; border-radius: 999px;
-      background: var(--accent-soft); border: 1px solid var(--accent-line);
-    }
-    .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2.4s ease-in-out infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
-    .eyebrow .sep { color: var(--text-faint); }
-
-    h1.hero-title {
-      font-family: var(--f-display); font-weight: 300;
-      font-size: clamp(44px, 5.9vw, 84px);
-      line-height: 0.92; letter-spacing: -0.055em;
-      margin: 22px 0 0; color: var(--text);
-    }
-    h1.hero-title em { font-style: normal; font-weight: 600; }
-    h1.hero-title .grad {
-      background: linear-gradient(135deg, #818cf8 0%, #22d3ee 60%, #a78bfa 100%);
-      -webkit-background-clip: text; background-clip: text;
-      color: transparent; font-weight: 500;
-    }
-    .hero-sub {
-      margin: 16px 0 0; max-width: 560px;
-      font-size: clamp(15px, 1.25vw, 17px); line-height: 1.55;
-      color: rgba(232,234,237,0.78); font-weight: 400;
-    }
-    .hero-status {
-      margin-top: 24px; max-width: 720px; padding-top: 14px;
-      border-top: 1px solid var(--line);
-    }
-    .hero-status-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      font-family: var(--f-mono); font-size: 10.5px; text-transform: uppercase;
-      letter-spacing: 0.16em; color: var(--text-muted);
-    }
-    .hero-status-head .live-dot {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
-      box-shadow: 0 0 12px var(--accent); flex: 0 0 auto;
-    }
-    .hero-status-grid {
-      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px; margin-top: 14px;
-    }
-    .hero-status-grid div {
-      min-height: 0; padding: 0 14px 0 0; border-right: 1px solid var(--line);
-      display: flex; flex-direction: column; justify-content: flex-start;
-    }
-    .hero-status-grid div:last-child { border-right: none; padding-right: 0; }
-    .hero-status-grid span {
-      font-family: var(--f-mono); font-size: 10px; text-transform: uppercase;
-      letter-spacing: 0.12em; color: var(--text-faint);
-    }
-    @media (max-width: 760px) {
-      .hero-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
-      .hero-status-grid div { border-right: none; padding-right: 0; }
-    }
-    .hero-cta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-    @media (max-width: 760px) { .hero-cta { margin-top: 24px; } }
-    .hero-meta {
-      margin-top: 28px; display: flex; gap: 24px; flex-wrap: wrap;
-      font-family: var(--f-mono); font-size: 11.5px; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.1em;
-    }
-    .hero-meta div { display: flex; align-items: center; gap: 6px; }
-    .hero-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-    .hero-meta .dot.cyan { background: var(--accent-2); }
-    .hero-meta .dot.violet { background: #a78bfa; }
-
-    /* Hero right: cosmic preview / orbit mock */
-    .hero-right { position: relative; aspect-ratio: 1; max-width: 440px; margin: 0 auto; width: 100%; }
-    .hero-orbit { position: absolute; inset: 0; }
-
-    /* ============================================================
-       SECTION scaffolding
-       ============================================================ */
-    section { padding: 140px 32px; position: relative; }
-    .container { max-width: 1320px; margin: 0 auto; position: relative; }
-
-    .section-header { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 72px; }
-    @media (min-width: 900px) { .section-header { grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; } }
-    .section-num { font-family: var(--f-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.18em; display: flex; align-items: center; gap: 10px; }
-    .section-num::before { content: ''; width: 24px; height: 1px; background: var(--line-strong); }
-    h2.section-title { font-family: var(--f-display); font-weight: 300; font-size: clamp(36px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.03em; margin: 0; color: var(--text); }
-    h2.section-title em { font-style: normal; color: var(--accent); font-weight: 500; }
-    .section-blurb { font-size: 17px; line-height: 1.55; color: var(--text-dim); max-width: 480px; }
-
-    /* ============================================================
-       MARQUEE / stats ticker
-       ============================================================ */
-    .marquee {
-      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-      padding: 28px 0; overflow: hidden; background: var(--ink-1);
-      position: relative; z-index: 3;
-    }
-    .marquee::before, .marquee::after {
-      content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
-    }
-    .marquee::before { left: 0; background: linear-gradient(90deg, var(--ink-1), transparent); }
-    .marquee::after { right: 0; background: linear-gradient(270deg, var(--ink-1), transparent); }
-    .marquee-track { display: flex; gap: 60px; animation: marquee 40s linear infinite; width: max-content; }
-    .marquee-item { display: flex; align-items: center; gap: 14px; font-family: var(--f-display); font-size: 22px; font-weight: 400; color: var(--text-dim); white-space: nowrap; }
-    .marquee-item .v { color: var(--text); font-weight: 500; }
-    .marquee-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-    @keyframes marquee { to { transform: translateX(-50%); } }
-
-    /* ============================================================
-       FEATURES — bento grid, asymmetric
-       ============================================================ */
-    .bento { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media (min-width: 720px) { .bento { grid-template-columns: repeat(6, 1fr); grid-auto-rows: minmax(200px, auto); } }
-    .bento-card {
-      position: relative; padding: 32px; border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008));
-      border: 1px solid var(--line);
-      overflow: hidden; transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .bento-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 50%), rgba(129,140,248,0.08), transparent 60%);
-      opacity: 0; transition: opacity 300ms; pointer-events: none;
-    }
-    .bento-card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
-    .bento-card:hover::before { opacity: 1; }
-    .bento-card .corner {
-      position: absolute; top: 16px; right: 16px;
-      font-family: var(--f-mono); font-size: 10px; color: var(--text-faint);
-      letter-spacing: 0.12em; text-transform: uppercase;
-    }
-    .bento-card .tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
-      color: var(--accent); padding: 4px 10px; border-radius: 999px;
-      background: var(--accent-soft); border: 1px solid var(--accent-line);
-    }
-    .bento-card h3 { font-family: var(--f-display); font-size: 22px; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; margin: 16px 0 8px; }
-    .bento-card p { font-size: 14.5px; line-height: 1.55; color: var(--text-dim); margin: 0; }
-    .bento-card .visual { position: absolute; pointer-events: none; opacity: 0.85; }
-
-    @media (min-width: 720px) {
-      .bento-card.b-1 { grid-column: span 4; }     /* wide */
-      .bento-card.b-2 { grid-column: span 2; }     /* narrow */
-      .bento-card.b-3 { grid-column: span 2; }
-      .bento-card.b-4 { grid-column: span 2; }
-      .bento-card.b-5 { grid-column: span 2; }     /* wide */
-      .bento-card.b-6 { grid-column: span 6; }     /* full width */
-    }
-
-    /* Card-specific visuals */
-    .b-1 .visual { right: 24px; bottom: 24px; width: 140px; }
-    .b-2 .visual { right: -10px; top: 30px; width: 90px; }
-    .b-3 .visual { left: 24px; bottom: 24px; width: 110px; }
-    .b-4 .visual { right: 24px; top: 30px; width: 100px; }
-    .b-5 .visual { right: 24px; top: 30px; width: 120px; }
-    .b-6 .visual { left: 32px; top: 50%; transform: translateY(-50%); width: 360px; max-width: 50%; }
-
-    /* ============================================================
-       BRAIN — split with interactive knowledge graph
-       ============================================================ */
-    .brain-grid { display: grid; grid-template-columns: 1fr; gap: 60px; align-items: center; }
-    @media (min-width: 1024px) { .brain-grid { grid-template-columns: 0.9fr 1.1fr; gap: 80px; } }
-    .brain-left h2 { margin: 16px 0 24px; }
-    .brain-left p { color: var(--text-dim); font-size: 17px; line-height: 1.55; margin: 0 0 32px; }
-    .brain-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
-    .brain-list li {
-      display: grid; grid-template-columns: 28px 1fr; gap: 16px;
-      padding: 20px 0; border-top: 1px solid var(--line);
-      align-items: start;
-    }
-    .brain-list li:last-child { border-bottom: 1px solid var(--line); }
-    .brain-list .idx { font-family: var(--f-mono); font-size: 11px; color: var(--text-faint); padding-top: 2px; }
-    .brain-list .label { font-family: var(--f-display); font-size: 17px; font-weight: 500; margin: 0 0 4px; }
-    .brain-list .desc { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin: 0; }
-
-    /* Graph card */
-    .graph-card {
-      position: relative; aspect-ratio: 5/4; border-radius: 20px;
-      background: radial-gradient(ellipse at center, rgba(129,140,248,0.04), transparent 70%), var(--ink-1);
-      border: 1px solid var(--line); overflow: hidden;
-    }
-    .graph-card svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .graph-card .label-tag {
-      position: absolute; font-family: var(--f-mono); font-size: 10.5px;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim);
-      padding: 5px 10px; border-radius: 6px;
-      background: rgba(5,6,8,0.85); border: 1px solid var(--line);
-      backdrop-filter: blur(10px); pointer-events: none;
-    }
-
-    /* Terminal panel (moved up, used as second brain companion) */
-    .terminal {
-      margin-top: 28px; border-radius: 14px; overflow: hidden;
-      background: var(--ink-1); border: 1px solid var(--line);
-    }
-    .terminal-head { display: flex; align-items: center; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.02); }
-    .terminal-head .d { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.1); }
-    .terminal-head .file { margin-left: 12px; font-family: var(--f-mono); font-size: 11.5px; color: var(--text-muted); }
-    .terminal-body { padding: 18px 20px; font-family: var(--f-mono); font-size: 13px; line-height: 1.75; }
-    .terminal-body .l { display: block; }
-    .terminal-body .pr { color: var(--accent); }
-    .terminal-body .ok { color: var(--accent-2); }
-    .terminal-body .mu { color: var(--text-muted); }
-    .terminal-body .hi { color: var(--text); }
-    .terminal-body .id { color: #a78bfa; }
-
-    /* ============================================================
-       STACK — table, technical
-       ============================================================ */
-    .stack-table { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--ink-1); }
-    .stack-row {
-      display: grid; grid-template-columns: 60px 1fr auto;
-      gap: 24px; padding: 22px 28px; align-items: center;
-      border-top: 1px solid var(--line);
-      transition: background 200ms;
-    }
-    .stack-row:first-child { border-top: none; }
-    .stack-row:hover { background: rgba(255,255,255,0.02); }
-    .stack-row .n { font-family: var(--f-mono); font-size: 12px; color: var(--text-faint); }
-    .stack-row .name { font-family: var(--f-display); font-size: 18px; font-weight: 500; }
-    .stack-row .name small { display: block; font-family: var(--f-sans); font-size: 13px; font-weight: 400; color: var(--text-dim); margin-top: 2px; }
-    .stack-row .v { font-family: var(--f-mono); font-size: 12px; color: var(--accent); padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); border: 1px solid var(--accent-line); }
-
-    /* ============================================================
-       DEPLOY — full-bleed dark slab with huge command
-       ============================================================ */
-    .deploy-section { padding-top: 0; padding-bottom: 140px; }
-    .deploy-slab {
-      position: relative; max-width: 1320px; margin: 0 auto;
-      padding: 96px 48px; border-radius: 28px;
-      background: radial-gradient(ellipse 600px 200px at 50% 0%, rgba(129,140,248,0.18), transparent 70%),
-                  linear-gradient(180deg, var(--ink-2), var(--ink-1));
-      border: 1px solid var(--line-strong);
-      text-align: center; overflow: hidden;
-    }
-    .deploy-slab::before {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 40px 40px; mask-image: radial-gradient(ellipse 80% 60% at center, black, transparent);
-    }
-    .deploy-slab > * { position: relative; }
-    .deploy-slab h2 { font-family: var(--f-display); font-weight: 200; font-size: clamp(40px, 5.4vw, 76px); line-height: 1; letter-spacing: -0.035em; margin: 0 0 16px; }
-    .deploy-slab .lead { color: var(--text-dim); font-size: 18px; max-width: 580px; margin: 0 auto 40px; line-height: 1.5; }
-    .deploy-cmd {
-      max-width: 880px; margin: 0 auto;
-      border-radius: 14px; background: var(--ink-0);
-      border: 1px solid var(--line-strong);
-      text-align: left; overflow: hidden;
-      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(129,140,248,0.1);
-    }
-    .deploy-cmd-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.02); }
-    .deploy-cmd-head .dots { display: flex; gap: 6px; }
-    .deploy-cmd-head .dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.1); }
-    .deploy-cmd-head .label { font-family: var(--f-mono); font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-    .deploy-cmd-head .label .live { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 6px; box-shadow: 0 0 8px var(--accent); }
-    .deploy-cmd-body { padding: 28px 32px; font-family: var(--f-mono); font-size: 15px; line-height: 1.6; overflow-x: auto; white-space: nowrap; }
-    .deploy-cmd-body .pr { color: var(--accent); margin-right: 8px; }
-    .deploy-cmd-body .flag { color: var(--accent-2); }
-    .deploy-cmd-body .str { color: #a78bfa; }
-    .deploy-cmd-body .pipe { color: var(--text-muted); }
-    .deploy-cmd-foot { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--line); background: rgba(255,255,255,0.02); font-family: var(--f-mono); font-size: 11.5px; color: var(--text-muted); }
-    .deploy-cmd-foot .key { padding: 2px 6px; border-radius: 4px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
-    .deploy-actions { margin-top: 36px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-    /* ============================================================
-       FOOTER
-       ============================================================ */
-    footer { border-top: 1px solid var(--line); padding: 64px 32px 40px; position: relative; }
-    .footer-grid { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 40px; }
-    @media (min-width: 720px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
-    .footer-brand { max-width: 320px; }
-    .footer-brand p { color: var(--text-dim); font-size: 14px; line-height: 1.55; margin: 16px 0 0; }
-    .footer-col h4 { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-faint); margin: 0 0 16px; }
-    .footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col a { color: var(--text-dim); font-size: 14px; transition: color 200ms; }
-    .footer-col a:hover { color: var(--text); }
-    .footer-bottom { max-width: 1320px; margin: 64px auto 0; padding-top: 28px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--f-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-
-    /* ============================================================
-       Reveal
-       ============================================================ */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
-    .reveal.in { opacity: 1; transform: translateY(0); }
-    .reveal-d-1 { transition-delay: 0.08s; }
-    .reveal-d-2 { transition-delay: 0.16s; }
-    .reveal-d-3 { transition-delay: 0.24s; }
-    /* Hero content is above the fold — show immediately so the
-       CTA is visible without waiting for scroll-triggered reveal */
-    .hero .reveal { opacity: 1; transform: none; }
-
-    /* ============================================================
-       Responsive polish — compact small-screen layout
-       ============================================================ */
-    @media (max-width: 760px) {
-      .hero { padding: 60px 20px 24px; }
-      .hero-grid { gap: 24px; }
-      h1.hero-title { font-size: 36px; margin: 18px 0 0; }
-      .hero-sub { margin: 14px 0 0; }
-      .hero-status { margin-top: 20px; }
-      .hero-right { max-width: 240px; }
-      section { padding: 88px 20px; }
-      .section-header { margin-bottom: 40px; }
-      .section-blurb { font-size: 15.5px; }
-      .marquee { padding: 20px 0; }
-      .marquee-item { font-size: 18px; }
-      footer { padding: 48px 20px 32px; }
-      .footer-bottom { margin-top: 40px; }
-      .deploy-actions { margin-top: 24px; }
-    }
-    @media (min-width: 761px) and (max-width: 1023px) {
-      .hero-grid { gap: 40px; }
-      .hero-right { max-width: 320px; }
-      section { padding: 100px 28px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-      .reveal { opacity: 1; transform: none; }
-      .marquee-track { animation: none; }
-    }
-  </style>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus — Cinematic AI Agents Experience</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
-<body>
+  <body class="bg-[#0a0a0c] text-[#f4f2ef] font-sans antialiased selection:bg-[#f5b8d0]/20 selection:text-white" style="margin:0; overflow-x:hidden;">
+    <canvas id="particlesBg" aria-hidden="true" style="position: fixed; inset: 0px; width: 1440px; height: 1024px; z-index: -1; pointer-events: none; display: block;" data-engine="three.js r160" width="2520" height="1792"></canvas>
+    <!-- Top Nav -->
+    <header style="position:fixed; top:0; left:0; right:0; z-index:60; backdrop-filter:blur(12px); background:rgba(10,10,12,0.55); border-bottom:1px solid rgba(255,255,255,0.06);">
+      <nav class="mx-auto flex items-center justify-between px-6 py-4 max-w-[77.5rem]">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-medium tracking-tighter uppercase text-white">
+            Nexus AI
+          </span>
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-sm text-[#b8b4ae]">
+          <a href="#cinematic" class="hover:text-white transition-colors duration-300">The System</a>
+          <a href="#collection" class="hover:text-white transition-colors duration-300">Agents</a>
+          <a href="#craft" class="hover:text-white transition-colors duration-300">Architecture</a>
+        </div>
+        <button class="text-sm font-normal px-4 py-1.5 rounded-full bg-[#ededed] text-[#1a1a1a] hover:bg-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.8),_0_2px_4px_rgba(0,0,0,0.1)]">
+          Deploy Now
+        </button>
+      </nav>
+    </header>
 
-  <canvas id="cosmos-canvas" aria-hidden="true"></canvas>
-  <div class="vignette" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
+    <!-- CINEMATIC PINNED SECTION -->
+    <section style="position: relative; height: 820vh" id="cinematic">
+      <div style="position: sticky; top: 0px; height: 100vh; width: 100%; overflow: hidden" id="pinStage">
+        <style>
+          @keyframes bouquetFloat {
+            0%   { transform: translateY(0); }
+            50%  { transform: translateY(-1.25rem); }
+            100% { transform: translateY(0); }
+          }
+          #bouquet {
+            animation: bouquetFloat 5s ease-in-out infinite;
+          }
+        </style>
+        <canvas style="position:absolute; inset:0; width:100%; height:100%; z-index:5; opacity:0.85;" id="petalCanvas"></canvas>
 
-  <div class="layer">
+        <div id="visualWrap" style="position: absolute; inset: 0px; z-index: 1; will-change: transform;">
+          <div id="bgLayer" style="position: absolute; inset: -8%; background-size: cover; background-position: center center; filter: saturate(0.7) brightness(0.55); will-change: transform; overflow: hidden; isolation: isolate;"></div>
+          <div style="position: absolute; inset: 0px; display: flex; align-items: center; justify-content: center; will-change: transform" id="midLayer">
+            <style>
+              @keyframes soft-float-aura {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-24px); }
+              }
+              .anim-float-aura {
+                animation: soft-float-aura 6s ease-in-out infinite;
+                will-change: transform;
+              }
+              @supports (animation-timeline: scroll()) {
+                @keyframes scroll-zoom-aura {
+                  0% { transform: scale(1); }
+                  100% { transform: scale(1.4); }
+                }
+                .anim-scroll-aura {
+                  animation: scroll-zoom-aura linear forwards;
+                  animation-timeline: scroll();
+                  will-change: transform;
+                }
+              }
+            </style>
+            <div class="anim-scroll-aura" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+              <div class="anim-float-aura" style="display: flex; align-items: center; justify-content: center">
+                <div id="bouquet" class="z-40 relative" style="width: min(56vw, 40rem); aspect-ratio: 16 / 11; background-image: url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d0f628cf-26bf-473d-81b9-50e422c51521_3840w.png'); background-size: contain; background-repeat: no-repeat; background-position: center center; will-change: transform; z-index: 40;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <!-- ============================================
-         NAV
-         ============================================ -->
-    <nav class="nav" id="nav">
-      <div class="nav-inner">
-        <a href="#top" class="brand">
-          <svg class="brand-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="g" cx="0.35" cy="0.35">
-                <stop offset="0%" stop-color="#818cf8"/>
-                <stop offset="100%" stop-color="#2e3354"/>
-              </radialGradient>
-            </defs>
-            <circle cx="16" cy="16" r="13" stroke="rgba(129,140,248,0.2)" stroke-width="0.6" fill="none"/>
-            <ellipse cx="16" cy="16" rx="12.5" ry="3.2" stroke="rgba(129,140,248,0.4)" stroke-width="0.6" transform="rotate(-22 16 16)" fill="none"/>
-            <circle cx="16" cy="16" r="5.5" fill="url(#g)"/>
-            <circle cx="16" cy="16" r="2" fill="#818cf8"/>
-          </svg>
-          Aether <span style="color:var(--accent)">Cosmos</span>
+        <div id="gradeWash" style="position: absolute; inset: 0px; z-index: 6; pointer-events: none; background: radial-gradient(circle at 50% 45%, rgba(245, 184, 208, 0.1), rgba(10, 10, 12, 0.75) 70%); mix-blend-mode: screen;"></div>
+
+        <div id="lbTop" style="position: absolute; top: 0px; left: 0px; right: 0px; height: 0.000314vh; background: rgb(0, 0, 0); z-index: 20; will-change: height;"></div>
+        <div id="lbBot" style="position: absolute; bottom: 0px; left: 0px; right: 0px; height: 0.000314vh; background: rgb(0, 0, 0); z-index: 20; will-change: height;"></div>
+
+        <div style="position: absolute; inset: 1.5rem; z-index: 30; pointer-events: none;">
+          <span style="position:absolute; top:0; left:0; width:1.375rem; height:1.375rem; border-top:1px solid rgba(255,255,255,0.25); border-left:1px solid rgba(255,255,255,0.25);"></span>
+          <span style="position:absolute; top:0; right:0; width:1.375rem; height:1.375rem; border-top:1px solid rgba(255,255,255,0.25); border-right:1px solid rgba(255,255,255,0.25);"></span>
+          <span style="position:absolute; bottom:0; left:0; width:1.375rem; height:1.375rem; border-bottom:1px solid rgba(255,255,255,0.25); border-left:1px solid rgba(255,255,255,0.25);"></span>
+          <span style="position:absolute; bottom:0; right:0; width:1.375rem; height:1.375rem; border-bottom:1px solid rgba(255,255,255,0.25); border-right:1px solid rgba(255,255,255,0.25);"></span>
+        </div>
+
+        <div style="position: absolute; inset: 0px; z-index: 40; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+          <div class="beat flex flex-col items-center" data-beat="0" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <p class="text-xs uppercase" style="letter-spacing:0.35rem; color:#f5b8d0; margin-bottom:1rem;">Version No. 07</p>
+            <h1 class="tracking-tight" style="font-size:clamp(2.5rem,8vw,6rem); line-height:0.95; font-weight:500;">Quiet Nodes,<br>Waiting Data</h1>
+          </div>
+          <div class="beat flex flex-col items-center" data-beat="1" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">The First Boot</h2>
+            <p class="text-sm mt-4 text-[#c9c4bd]" style="max-width:27.5rem;">Algorithms unfold as raw data moves through the neural network.</p>
+          </div>
+          <div class="beat flex flex-col items-center" data-beat="2" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#f5b8d0; margin-bottom:0.75rem;">The Initialization</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Connected Swarms</h2>
+          </div>
+          <div class="beat flex flex-col items-center" data-beat="3" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">A Full Cluster</h2>
+            <p class="text-sm mt-4 text-[#c9c4bd]" style="max-width:26.25rem;">Forty-two autonomous agents, architected to scale from every angle.</p>
+          </div>
+          <div class="beat flex flex-col items-center" data-beat="4" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#f5b8d0; margin-bottom:0.75rem;">Data Lift</p>
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Carried by Cloud</h2>
+          </div>
+          <div class="beat flex flex-col items-center" data-beat="5" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Into the Stream</h2>
+          </div>
+          <div class="beat flex flex-col items-center" data-beat="6" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
+            <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#f5b8d0; margin-bottom:0.75rem;">Deployed Live</p>
+            <h2 class="tracking-tight uppercase" style="font-size:clamp(2.375rem,8vw,5.625rem); line-height:1; font-weight:500;">Nexus AI</h2>
+            <p class="text-sm mt-4 text-[#c9c4bd]">System active — explore the agents below.</p>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 2rem; bottom: 3.5rem; z-index: 45; display: flex; align-items: center; gap: 1rem;">
+          <div id="timelineTrack" style="width:11.25rem; height:0.1875rem; border-radius:0.1875rem; background:rgba(255,255,255,0.16); overflow:hidden;">
+            <div id="timelineFill" style="height: 100%; width: 0%; background: linear-gradient(90deg, rgb(245, 184, 208), rgb(194, 106, 151));"></div>
+          </div>
+          <span id="timeLabel" class="text-xs tabular-nums text-[#b8b4ae]">0.00s</span>
+        </div>
+
+        <div style="position: absolute; right: 2rem; bottom: 3.5rem; z-index: 45; display: flex; gap: 0.625rem;" id="dotRow"></div>
+      </div>
+    </section>
+
+    <!-- COLLECTION SECTION -->
+    <section id="collection" class="mx-auto px-6 py-24 max-w-[77.5rem] relative overflow-hidden">
+      <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 9px); pointer-events:none;"></div>
+
+      <div class="reveal-line overflow-hidden">
+        <p class="text-xs uppercase text-[#f5b8d0]" style="letter-spacing:0.3rem;">The Agents</p>
+      </div>
+      <div class="reveal-line overflow-hidden mt-3">
+        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;" data-scroll-word="true">Autonomous systems built to scale with data</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+        <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4dd5a8b0-2d0d-44eb-ae24-75a4345db5ac_3840w.png'); background-size:cover; background-position:center;"></div>
+          <div class="flex flex-col flex-grow justify-between">
+            <div>
+              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8e6e3]">Data Harvester</h3>
+              <p class="text-sm mt-1.5 text-[#9c988f]">High-frequency extraction for real-time insights.</p>
+            </div>
+            <p class="text-sm mt-4 font-normal text-[#f5b8d0]">$780/mo</p>
+          </div>
+        </div>
+
+        <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d898f02c-0397-49fe-9aca-cab19a5582c5_3840w.png'); background-size:cover; background-position:center;"></div>
+          <div class="flex flex-col flex-grow justify-between">
+            <div>
+              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8e6e3]">Neural Orchestrator</h3>
+              <p class="text-sm mt-1.5 text-[#9c988f]">Dynamic load balancing that shifts with any traffic.</p>
+            </div>
+            <p class="text-sm mt-4 font-normal text-[#f5b8d0]">$940/mo</p>
+          </div>
+        </div>
+
+        <div class="fade-card group flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 cursor-pointer border rounded-2xl p-5 backdrop-blur-lg">
+          <div class="rounded-xl overflow-hidden mb-5" style="aspect-ratio:4/5; background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/25d0ce5e-7521-4346-900f-d2ff2902bd46_3840w.png'); background-size:cover; background-position:center;"></div>
+          <div class="flex flex-col flex-grow justify-between">
+            <div>
+              <h3 class="text-base font-medium tracking-tight group-hover:text-white transition-colors text-[#e8e6e3]">Logic Synthesizer</h3>
+              <p class="text-sm mt-1.5 text-[#9c988f]">Statement deployment, forty-two simultaneous models.</p>
+            </div>
+            <p class="text-sm mt-4 font-normal text-[#f5b8d0]">$1,260/mo</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRAFT PARALLAX STRIP -->
+    <section id="craft" class="relative overflow-hidden flex items-center" style="height:70vh;">
+      <div id="craftBg" class="absolute inset-[-15%] bg-cover bg-center will-change-transform" style="background-image:url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cf973fee-26dd-4029-b42e-26dfa75c7417_3840w.png'); filter:brightness(0.35) saturate(0.8);"></div>
+      <div class="mx-auto px-6 max-w-[77.5rem] relative z-10">
+        <div class="reveal-line overflow-hidden">
+          <h2 class="tracking-tight text-white" style="font-size:clamp(1.75rem,5vw,3.25rem); font-weight:500; max-width:40rem; line-height:1.1;">Every algorithm is optimized by hand, the moment it compiles.</h2>
+        </div>
+        <a href="#" class="inline-flex items-center gap-2 mt-8 text-sm font-medium px-5 py-2.5 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors backdrop-blur-md">
+          Explore our architecture
+          <iconify-icon icon="solar:arrow-right-linear" width="1rem"></iconify-icon>
         </a>
-        <div class="nav-links">
-          <a href="#features"><span class="num">01</span>Features</a>
-          <a href="#brain"><span class="num">02</span>Second Brain</a>
-          <a href="#stack"><span class="num">03</span>Stack</a>
-          <a href="#deploy"><span class="num">04</span>Deploy</a>
-        </div>
-        <div class="nav-cta">
-          <a class="btn btn-icon btn-ghost" href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener" aria-label="GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.13c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.24 2.75.12 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5Z"/></svg>
-          </a>
-          <a class="btn btn-primary" href="#deploy">Get started <span class="arrow">→</span></a>
-        </div>
       </div>
-    </nav>
+    </section>
 
-    <!-- ============================================
-         HERO
-         ============================================ -->
-    <section class="hero" id="top">
-      <div class="hero-grid">
-        <div class="hero-left reveal">
-          <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            v0.4.0
-            <span class="sep">·</span>
-            Self-hosted cloud + AI memory
-          </div>
-          <h1 class="hero-title">
-            Your files.<br />
-            Your memory.<br />
-            <em class="grad">Your agents.</em>
-          </h1>
-          <p class="hero-sub">
-            Aether Cosmos is the self-hosted cloud built for the AI era. Files in R2, metadata and a knowledge graph in PostgreSQL, and a Second Brain your agents remember across sessions — running on a single VPS.
-          </p>
-          <div class="hero-cta">
-            <a class="btn btn-primary btn-lg" href="#deploy">
-              Deploy in one command
-              <span class="arrow">→</span>
-            </a>
-            <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
-          </div>
-          <div class="hero-meta">
-            <div><span class="dot"></span>3,422 tests</div>
-            <div><span class="dot cyan"></span>End-to-end encryption</div>
-            <div><span class="dot violet"></span>100% self-hosted</div>
-          </div>
-          <div class="hero-status reveal reveal-d-1">
-            <div class="hero-status-head">
-              <span class="live-dot"></span>
-              live system
-            </div>
-            <div class="hero-status-grid">
-              <div><span>Files</span><strong>R2</strong></div>
-              <div><span>Memory</span><strong>PostgreSQL</strong></div>
-              <div><span>Agents</span><strong>Second Brain</strong></div>
-              <div><span>Deploy</span><strong>One command</strong></div>
-            </div>
-          </div>
+    <section id="integration" class="mx-auto px-6 py-24 max-w-[77.5rem] relative">
+      <div class="reveal-line overflow-hidden">
+        <p class="text-xs uppercase text-[#f5b8d0]" style="letter-spacing:0.3rem;">Integration</p>
+      </div>
+      <div class="reveal-line overflow-hidden mt-3">
+        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">Deploy seamlessly across your stack</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
+        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-10 py-10">
+          <iconify-icon icon="solar:server-square-linear" width="2.5rem" class="text-[#f5b8d0] mb-6"></iconify-icon>
+          <h3 class="text-xl font-medium tracking-tight text-[#e8e6e3] mb-2">Enterprise API</h3>
+          <p class="text-sm text-[#9c988f]">Connect your infrastructure directly to our neural clusters with a single API key. Highly scalable, sub-millisecond latency.</p>
         </div>
-
-        <div class="hero-right reveal reveal-d-1">
-          <div class="hero-orbit">
-            <!-- SVG orbit preview: stylized planet + ring + nodes -->
-            <svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-              <defs>
-                <radialGradient id="hg" cx="0.35" cy="0.35">
-                  <stop offset="0%" stop-color="#a5b4fc"/>
-                  <stop offset="55%" stop-color="#818cf8"/>
-                  <stop offset="100%" stop-color="#2e3354"/>
-                </radialGradient>
-                <radialGradient id="hg2" cx="0.5" cy="0.5">
-                  <stop offset="0%" stop-color="#0a0d12"/>
-                  <stop offset="100%" stop-color="#000"/>
-                </radialGradient>
-                <filter id="hblur"><feGaussianBlur stdDeviation="20"/></filter>
-              </defs>
-
-              <!-- Atmosphere -->
-              <circle cx="240" cy="240" r="200" fill="rgba(129,140,248,0.04)" filter="url(#hblur)"/>
-
-              <!-- Orbital ring -->
-              <ellipse cx="240" cy="240" rx="180" ry="60" stroke="rgba(129,140,248,0.18)" stroke-width="0.6" fill="none" transform="rotate(-15 240 240)"/>
-              <ellipse cx="240" cy="240" rx="180" ry="60" stroke="rgba(129,140,248,0.08)" stroke-width="0.4" fill="none" transform="rotate(-15 240 240)" stroke-dasharray="2 6"/>
-
-              <!-- Connecting lines to nodes -->
-              <line x1="240" y1="240" x2="380" y2="160" stroke="rgba(129,140,248,0.2)" stroke-width="0.5"/>
-              <line x1="240" y1="240" x2="100" y2="320" stroke="rgba(34,211,238,0.2)" stroke-width="0.5"/>
-              <line x1="240" y1="240" x2="340" y2="380" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
-
-              <!-- Planet -->
-              <circle cx="240" cy="240" r="80" fill="url(#hg2)"/>
-              <circle cx="240" cy="240" r="80" fill="url(#hg)" opacity="0.95"/>
-              <!-- Continent patterns -->
-              <path d="M 200 220 Q 215 215, 230 225 T 260 235 Q 270 250, 255 260 Q 240 268, 225 260 Q 210 250, 200 240 Z" fill="rgba(0,40,15,0.35)"/>
-              <path d="M 270 250 Q 285 248, 295 258 Q 290 275, 275 270 Z" fill="rgba(0,40,15,0.3)"/>
-              <path d="M 210 270 Q 220 280, 240 278 Q 250 285, 245 290 Q 225 295, 215 285 Z" fill="rgba(0,40,15,0.3)"/>
-              <!-- Ice cap -->
-              <path d="M 200 175 Q 220 165, 240 170 Q 260 165, 280 175 Q 270 185, 250 182 Q 230 185, 210 182 Z" fill="rgba(255,255,255,0.6)"/>
-
-              <!-- Atmosphere rim -->
-              <circle cx="240" cy="240" r="82" fill="none" stroke="rgba(129,140,248,0.5)" stroke-width="1.5" filter="url(#hblur)" opacity="0.6"/>
-
-              <!-- Connected nodes -->
-              <g class="node-n">
-                <circle cx="380" cy="160" r="4" fill="#818cf8"/>
-                <circle cx="380" cy="160" r="8" fill="none" stroke="rgba(129,140,248,0.4)" stroke-width="0.5">
-                  <animate attributeName="r" values="6;14;6" dur="3s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
-                </circle>
-                <text x="388" y="156" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="10" letter-spacing="0.1em">FILES</text>
-              </g>
-              <g class="node-n">
-                <circle cx="100" cy="320" r="4" fill="#22d3ee"/>
-                <circle cx="100" cy="320" r="8" fill="none" stroke="rgba(34,211,238,0.4)" stroke-width="0.5">
-                  <animate attributeName="r" values="6;14;6" dur="3s" begin="-1s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" begin="-1s" repeatCount="indefinite"/>
-                </circle>
-                <text x="62" y="340" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="10" letter-spacing="0.1em">BRAIN</text>
-              </g>
-              <g class="node-n">
-                <circle cx="340" cy="380" r="4" fill="#a78bfa"/>
-                <circle cx="340" cy="380" r="8" fill="none" stroke="rgba(167,139,250,0.4)" stroke-width="0.5">
-                  <animate attributeName="r" values="6;14;6" dur="3s" begin="-2s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" begin="-2s" repeatCount="indefinite"/>
-                </circle>
-                <text x="306" y="400" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="10" letter-spacing="0.1em">MCP</text>
-              </g>
-            </svg>
-          </div>
+        <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-10 py-10">
+          <iconify-icon icon="solar:cloud-network-linear" width="2.5rem" class="text-[#f5b8d0] mb-6"></iconify-icon>
+          <h3 class="text-xl font-medium tracking-tight text-[#e8e6e3] mb-2">Cloud Native</h3>
+          <p class="text-sm text-[#9c988f]">Deploy edge nodes directly inside your AWS, GCP, or Azure environments. Keep your data localized and compliant.</p>
         </div>
       </div>
     </section>
 
-    <!-- ============================================
-         MARQUEE — tech stats ticker
-         ============================================ -->
-    <div class="marquee">
-      <div class="marquee-track">
-        <div class="marquee-item"><span class="dot"></span><span class="v">3,422</span> tests</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">Next.js 16.3</span></div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">PostgreSQL</span> + Drizzle</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">Cloudflare R2</span> storage</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">Redis</span> + BullMQ</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">E2EE</span> optional</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">MCP</span> server included</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">One-command</span> deploy</div>
-        <!-- duplicate for seamless loop -->
-        <div class="marquee-item"><span class="dot"></span><span class="v">3,422</span> tests</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">Next.js 16.3</span></div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">PostgreSQL</span> + Drizzle</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">Cloudflare R2</span> storage</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">Redis</span> + BullMQ</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">E2EE</span> optional</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">MCP</span> server included</div>
-        <div class="marquee-item"><span class="dot"></span><span class="v">One-command</span> deploy</div>
+    <section id="noema-manifesto" style="position:relative; min-height:100vh; background:#f4efe7; color:#050505; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:6rem 1.25rem; font-family:'Inter',sans-serif;">
+      <div style="position:absolute; inset:0; background:radial-gradient(circle at 20% 30%, rgba(79,70,229,0.24), transparent 32%), radial-gradient(circle at 80% 72%, rgba(244,63,94,0.22), transparent 30%);"></div>
+      <div style="position:relative; z-index:10; max-width:min(1180px,92vw); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.18em 0.28em; text-align:center;">
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">Everything</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">your</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">autonomous</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">network</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">needs,</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">deployed</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">into</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">one</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">unified</span>
+        <span style="display:inline-block; font-weight:800; font-size:clamp(2.4rem,7.8vw,7.4rem); line-height:0.9; letter-spacing:-0.045em; text-transform:uppercase;">ecosystem.</span>
       </div>
-    </div>
+      <p style="position:absolute; left:1.25rem; bottom:1.25rem; z-index:10; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; color:rgba(0,0,0,0.6);">04 / Architecture</p>
+    </section>
 
-    <!-- ============================================
-         FEATURES — bento grid
-         ============================================ -->
-    <section id="features">
-      <div class="container">
-        <div class="section-header">
+    <section id="noema-board" style="position:relative; min-height:100vh; color:#050505; overflow:hidden; padding:7rem 1.25rem 4rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
+      <h2 style="position:absolute; z-index:0; color:rgba(0,0,0,0.18); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:50%; transform:translate(-50%,-50%);">MODELS</h2>
+      <div style="position:relative; z-index:10; width:100%; max-width:72rem; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.75rem;">
+        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#050505; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <div class="section-num">01 — Capabilities</div>
-            <h2 class="section-title reveal">Everything you'd expect.<br/><em>Plus a brain.</em></h2>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Deployment</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Cluster Alpha:<br>Online</h3>
           </div>
-          <p class="section-blurb reveal reveal-d-1">Cloud storage that doesn't just hold files — it remembers what they mean and what your agents did with them. Six capabilities, one cohesive system.</p>
-        </div>
-
-        <div class="bento">
-
-          <div class="bento-card b-1 reveal" data-tilt>
-            <span class="corner">01 / 06</span>
-            <span class="tag">Storage</span>
-            <h3>Upload, version, and search anything.</h3>
-            <p>Whole folders. Drag-and-drop. Version history. Recycle bin. Full-text search across every file — even inside E2EE blobs, if you hold the key.</p>
-            <svg class="visual" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <rect x="10" y="20" width="48" height="64" rx="3" stroke="rgba(129,140,248,0.4)" stroke-width="0.6"/>
-              <rect x="30" y="30" width="48" height="64" rx="3" stroke="rgba(129,140,248,0.4)" stroke-width="0.6"/>
-              <rect x="50" y="40" width="48" height="64" rx="3" stroke="rgba(129,140,248,0.4)" stroke-width="0.6"/>
-              <line x1="58" y1="55" x2="90" y2="55" stroke="rgba(129,140,248,0.3)" stroke-width="0.4"/>
-              <line x1="58" y1="62" x2="80" y2="62" stroke="rgba(129,140,248,0.2)" stroke-width="0.4"/>
-              <line x1="58" y1="69" x2="86" y2="69" stroke="rgba(129,140,248,0.2)" stroke-width="0.4"/>
-              <line x1="58" y1="76" x2="74" y2="76" stroke="rgba(129,140,248,0.2)" stroke-width="0.4"/>
-              <circle cx="120" cy="60" r="2" fill="#818cf8"><animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/></circle>
-              <line x1="98" y1="60" x2="118" y2="60" stroke="rgba(129,140,248,0.4)" stroke-width="0.4" stroke-dasharray="2 2"/>
-              <text x="130" y="64" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">v3</text>
-            </svg>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
+            <span>US-East<br>99.9% Uptime</span>
           </div>
-
-          <div class="bento-card b-2 reveal reveal-d-1" data-tilt>
-            <span class="corner">02 / 06</span>
-            <span class="tag">Security</span>
-            <h3>E2EE by default.</h3>
-            <p>Server never sees your passphrase.</p>
-            <svg class="visual" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <rect x="25" y="40" width="50" height="40" rx="4" stroke="rgba(129,140,248,0.5)" stroke-width="1"/>
-              <path d="M 32 40 V 30 a 18 18 0 0 1 36 0 V 40" stroke="rgba(129,140,248,0.5)" stroke-width="1"/>
-              <circle cx="50" cy="58" r="3" fill="#818cf8"/>
-              <line x1="50" y1="58" x2="50" y2="68" stroke="#818cf8" stroke-width="1.5"/>
-            </svg>
-          </div>
-
-          <div class="bento-card b-3 reveal reveal-d-1" data-tilt>
-            <span class="corner">03 / 06</span>
-            <span class="tag">Auth</span>
-            <h3>Argon2id + TOTP + numeric step.</h3>
-            <p>Email OTP, per-user quotas, lockout policies.</p>
-            <svg class="visual" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <rect x="10" y="20" width="20" height="28" rx="2" stroke="rgba(129,140,248,0.4)"/>
-              <rect x="34" y="20" width="20" height="28" rx="2" stroke="rgba(129,140,248,0.4)"/>
-              <rect x="58" y="20" width="20" height="28" rx="2" stroke="rgba(129,140,248,0.4)"/>
-              <rect x="82" y="20" width="20" height="28" rx="2" stroke="rgba(129,140,248,0.4)"/>
-              <line x1="20" y1="30" x2="20" y2="38" stroke="#818cf8"/>
-              <line x1="44" y1="30" x2="44" y2="38" stroke="#818cf8"/>
-              <line x1="68" y1="30" x2="68" y2="38" stroke="#818cf8"/>
-              <line x1="92" y1="30" x2="92" y2="38" stroke="#818cf8"/>
-              <line x1="10" y1="56" x2="102" y2="56" stroke="rgba(129,140,248,0.3)" stroke-dasharray="2 2"/>
-              <text x="10" y="78" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="10" letter-spacing="0.15em">●●●● ●●●●</text>
-            </svg>
-          </div>
-
-          <div class="bento-card b-4 reveal reveal-d-2" data-tilt>
-            <span class="corner">04 / 06</span>
-            <span class="tag">Share</span>
-            <h3>Links with audit trails.</h3>
-            <p>Documents, images, video, audio — previewed in-browser. Every share, every view, logged.</p>
-            <svg class="visual" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <circle cx="30" cy="35" r="6" stroke="rgba(129,140,248,0.5)"/>
-              <circle cx="70" cy="35" r="6" stroke="rgba(129,140,248,0.5)"/>
-              <circle cx="50" cy="70" r="6" stroke="rgba(129,140,248,0.5)"/>
-              <line x1="35" y1="38" x2="46" y2="65" stroke="rgba(129,140,248,0.3)"/>
-              <line x1="65" y1="38" x2="54" y2="65" stroke="rgba(129,140,248,0.3)"/>
-              <line x1="36" y1="35" x2="64" y2="35" stroke="rgba(129,140,248,0.3)"/>
-            </svg>
-          </div>
-
-          <div class="bento-card b-5 reveal reveal-d-2" data-tilt>
-            <span class="corner">05 / 06</span>
-            <span class="tag">Admin</span>
-            <h3>One console. Every signal.</h3>
-            <p>Users, impersonation, audits, storage analytics, activity, settings — all live, all queryable.</p>
-            <svg class="visual" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <path d="M 10 80 L 30 60 L 50 70 L 70 40 L 90 50 L 110 25" stroke="#818cf8" stroke-width="1.2" fill="none"/>
-              <line x1="10" y1="90" x2="110" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-              <line x1="10" y1="10" x2="10" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-              <circle cx="30" cy="60" r="2" fill="#818cf8"/>
-              <circle cx="50" cy="70" r="2" fill="#818cf8"/>
-              <circle cx="70" cy="40" r="2" fill="#22d3ee"/>
-              <circle cx="90" cy="50" r="2" fill="#818cf8"/>
-              <circle cx="110" cy="25" r="2" fill="#a78bfa"/>
-            </svg>
-          </div>
-
-          <div class="bento-card b-6 reveal reveal-d-3" data-tilt>
-            <span class="corner">06 / 06</span>
-            <span class="tag">Backup</span>
-            <h3>One encrypted <code>.afrbak</code> per account. Nine words to restore anywhere.</h3>
-            <p>Export your files and your Second Brain as a single archive, encrypted, with a recovery phrase that works on any Aether Cosmos install. Disaster recovery, simplified.</p>
-            <svg class="visual" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <rect x="10" y="20" width="120" height="160" rx="6" fill="rgba(129,140,248,0.05)" stroke="rgba(129,140,248,0.3)" stroke-width="0.6"/>
-              <text x="22" y="42" fill="#818cf8" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.12em">ACCOUNT</text>
-              <line x1="22" y1="50" x2="118" y2="50" stroke="rgba(129,140,248,0.2)"/>
-              <text x="22" y="68" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="8">FILES</text>
-              <rect x="22" y="74" width="86" height="3" rx="1" fill="rgba(129,140,248,0.4)"/>
-              <text x="22" y="92" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="8">MEMORY</text>
-              <rect x="22" y="98" width="64" height="3" rx="1" fill="rgba(34,211,238,0.4)"/>
-              <text x="22" y="116" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="8">SETTINGS</text>
-              <rect x="22" y="122" width="42" height="3" rx="1" fill="rgba(167,139,250,0.4)"/>
-              <text x="22" y="140" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="8">SHARES</text>
-              <rect x="22" y="146" width="76" height="3" rx="1" fill="rgba(129,140,248,0.4)"/>
-
-              <text x="160" y="100" fill="#818cf8" font-family="Geist Mono, monospace" font-size="20" text-anchor="middle">→</text>
-
-              <rect x="190" y="40" width="150" height="120" rx="6" fill="rgba(129,140,248,0.08)" stroke="rgba(129,140,248,0.5)" stroke-width="0.8" stroke-dasharray="3 3"/>
-              <text x="265" y="60" fill="#818cf8" font-family="Geist Mono, monospace" font-size="9" text-anchor="middle" letter-spacing="0.12em">.AFRBAK</text>
-              <text x="265" y="76" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="7" text-anchor="middle">AES-256-GCM</text>
-              <line x1="200" y1="86" x2="330" y2="86" stroke="rgba(129,140,248,0.2)"/>
-              <text x="200" y="100" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="6.5">[ ENCRYPTED BLOB ]</text>
-              <text x="200" y="112" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="6.5">[ ENCRYPTED BLOB ]</text>
-              <text x="200" y="124" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="6.5">[ ENCRYPTED BLOB ]</text>
-              <line x1="200" y1="132" x2="330" y2="132" stroke="rgba(129,140,248,0.2)"/>
-              <text x="265" y="146" fill="#5d6573" font-family="Geist Mono, monospace" font-size="6" text-anchor="middle">9-WORD PHRASE</text>
-              <text x="265" y="155" fill="#5d6573" font-family="Geist Mono, monospace" font-size="6" text-anchor="middle">REQUIRED TO RESTORE</text>
-            </svg>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         SECOND BRAIN
-         ============================================ -->
-    <section id="brain">
-      <div class="container">
-        <div class="section-header">
+        </article>
+        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#050505; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <div class="section-num">02 — Second Brain</div>
-            <h2 class="section-title reveal">Memory that <em>outlives</em> the conversation.</h2>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Processing</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Neural Node<br>Active</h3>
           </div>
-          <p class="section-blurb reveal reveal-d-1">Most agents start from zero every session. Aether Cosmos gives yours a persistent, user-owned memory — accessible over MCP from any client.</p>
-        </div>
-
-        <div class="brain-grid">
-          <div class="brain-left reveal">
-            <ul class="brain-list">
-              <li>
-                <span class="idx">01</span>
-                <div>
-                  <h4 class="label">Versioned memories</h4>
-                  <p class="desc">Nothing is ever lost. Every fact carries its source and timestamp. Diff and roll back like Git for thoughts.</p>
-                </div>
-              </li>
-              <li>
-                <span class="idx">02</span>
-                <div>
-                  <h4 class="label">Knowledge graph</h4>
-                  <p class="desc">Visualize how concepts, people, and projects connect across time. Edges are first-class — query them like data.</p>
-                </div>
-              </li>
-              <li>
-                <span class="idx">03</span>
-                <div>
-                  <h4 class="label">Hybrid retrieval</h4>
-                  <p class="desc">Keyword + semantic search over the entire memory corpus. Sub-100ms recall for thousands of facts.</p>
-                </div>
-              </li>
-              <li>
-                <span class="idx">04</span>
-                <div>
-                  <h4 class="label">MCP server</h4>
-                  <p class="desc">Connect Claude, Cursor, Cline, or any MCP-aware agent over HTTP. Standard protocol, zero glue code.</p>
-                </div>
-              </li>
-            </ul>
-
-            <div class="terminal">
-              <div class="terminal-head">
-                <span class="d"></span><span class="d"></span><span class="d"></span>
-                <span class="file">brain.recall.ts</span>
-              </div>
-              <div class="terminal-body">
-                <span class="l"><span class="pr">→</span> <span class="hi">user asks:</span> <span class="mu">"What did we decide about the auth flow?"</span></span>
-                <span class="l"><span class="pr">←</span> <span class="ok">retrieved 4 memories · 2 links · 0.87 confidence</span></span>
-                <span class="l"><span class="mu">&nbsp;&nbsp;<span class="id">▸</span> Use Argon2id for password hashing</span> <span class="mu">2026-08-12</span></span>
-                <span class="l"><span class="mu">&nbsp;&nbsp;<span class="id">▸</span> TOTP required for all admin accounts</span> <span class="mu">2026-08-14</span></span>
-                <span class="l"><span class="mu">&nbsp;&nbsp;<span class="id">▸</span> Numeric 2nd step: 6 digits, rolling</span> <span class="mu">2026-08-19</span></span>
-                <span class="l"><span class="mu">&nbsp;&nbsp;<span class="id">▸</span> Lockout after 5 failed attempts</span> <span class="mu">2026-08-20</span></span>
-                <span class="l"><span class="pr">→</span> <span class="mu">context returned to agent · session continues</span></span>
-              </div>
-            </div>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
+            <span>EU-Central<br>12ms Ping</span>
           </div>
-
-          <div class="graph-card reveal reveal-d-1">
-            <svg viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <radialGradient id="central">
-                  <stop offset="0%" stop-color="#818cf8" stop-opacity="0.4"/>
-                  <stop offset="100%" stop-color="#818cf8" stop-opacity="0"/>
-                </radialGradient>
-              </defs>
-              <circle cx="300" cy="240" r="80" fill="url(#central)"/>
-
-              <!-- Edges (animated) -->
-              <g stroke-width="0.7" fill="none" opacity="0.5">
-                <line x1="300" y1="240" x2="120" y2="100" stroke="#818cf8"/>
-                <line x1="300" y1="240" x2="480" y2="100" stroke="#818cf8"/>
-                <line x1="300" y1="240" x2="100" y2="280" stroke="#22d3ee"/>
-                <line x1="300" y1="240" x2="500" y2="280" stroke="#22d3ee"/>
-                <line x1="300" y1="240" x2="180" y2="400" stroke="#a78bfa"/>
-                <line x1="300" y1="240" x2="420" y2="400" stroke="#a78bfa"/>
-                <line x1="120" y1="100" x2="180" y2="400" stroke="rgba(255,255,255,0.1)" stroke-dasharray="2 4"/>
-                <line x1="480" y1="100" x2="420" y2="400" stroke="rgba(255,255,255,0.1)" stroke-dasharray="2 4"/>
-                <line x1="100" y1="280" x2="500" y2="280" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2 4"/>
-              </g>
-
-              <!-- Central node -->
-              <circle cx="300" cy="240" r="6" fill="#818cf8"/>
-              <circle cx="300" cy="240" r="14" fill="none" stroke="rgba(129,140,248,0.4)" stroke-width="0.6">
-                <animate attributeName="r" values="10;22;10" dur="4s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0.7;0;0.7" dur="4s" repeatCount="indefinite"/>
-              </circle>
-              <text x="300" y="270" text-anchor="middle" fill="#e8eaed" font-family="Sora, sans-serif" font-size="11" font-weight="500" letter-spacing="0.1em">AETHER</text>
-              <text x="300" y="284" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="8" letter-spacing="0.14em">PRIMARY NODE</text>
-
-              <!-- Orbiting nodes -->
-              <g>
-                <circle cx="120" cy="100" r="4" fill="#818cf8"/>
-                <text x="120" y="88" text-anchor="middle" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">FILES</text>
-                <text x="120" y="116" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="7">128 entities</text>
-              </g>
-              <g>
-                <circle cx="480" cy="100" r="4" fill="#818cf8"/>
-                <text x="480" y="88" text-anchor="middle" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">AUTH</text>
-                <text x="480" y="116" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="7">42 entities</text>
-              </g>
-              <g>
-                <circle cx="100" cy="280" r="4" fill="#22d3ee"/>
-                <text x="100" y="300" text-anchor="middle" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">MEMORIES</text>
-                <text x="100" y="313" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="7">3,422 facts</text>
-              </g>
-              <g>
-                <circle cx="500" cy="280" r="4" fill="#22d3ee"/>
-                <text x="500" y="300" text-anchor="middle" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">MCP</text>
-                <text x="500" y="313" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="7">7 connections</text>
-              </g>
-              <g>
-                <circle cx="180" cy="400" r="4" fill="#a78bfa"/>
-                <text x="180" y="420" text-anchor="middle" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">AGENTS</text>
-                <text x="180" y="433" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="7">12 linked</text>
-              </g>
-              <g>
-                <circle cx="420" cy="400" r="4" fill="#a78bfa"/>
-                <text x="420" y="420" text-anchor="middle" fill="#9aa3b2" font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.1em">PROJECTS</text>
-                <text x="420" y="433" text-anchor="middle" fill="#5d6573" font-family="Geist Mono, monospace" font-size="7">36 contexts</text>
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         STACK
-         ============================================ -->
-    <section id="stack">
-      <div class="container">
-        <div class="section-header">
+        </article>
+        <article style="min-height:158px; border:1px solid rgba(255,255,255,0.2); background:#050505; color:white; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <div class="section-num">03 — The stack</div>
-            <h2 class="section-title reveal">Boring on <em>purpose.</em></h2>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(255,255,255,0.45);">Training</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Deep Learning<br>Epoch 42</h3>
           </div>
-          <p class="section-blurb reveal reveal-d-1">Every dependency is one you can hire for. Nothing exotic, nothing you can't self-host on a $5 VPS.</p>
-        </div>
-
-        <div class="stack-table reveal">
-          <div class="stack-row">
-            <span class="n">01</span>
-            <span class="name">Framework <small>App Router, React Server Components</small></span>
-            <span class="v">Next.js 16.3</span>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(255,255,255,0.58);">
+            <span>Global<br>Continuous</span>
           </div>
-          <div class="stack-row">
-            <span class="n">02</span>
-            <span class="name">Language <small>strict, modern</small></span>
-            <span class="v">TypeScript 5</span>
+        </article>
+        <article style="min-height:158px; border:1px solid rgba(0,0,0,0.2); background:#F43F5E; color:#050505; padding:1rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.18em; color:rgba(0,0,0,0.55);">Security</p>
+            <h3 style="font-weight:800; font-size:1.875rem; line-height:1; margin-top:0.75rem;">Zero-Trust<br>Firewall</h3>
           </div>
-          <div class="stack-row">
-            <span class="n">03</span>
-            <span class="name">Database <small>Postgres 16, full-text search built in</small></span>
-            <span class="v">PostgreSQL + Drizzle</span>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; font-size:0.75rem; color:rgba(0,0,0,0.65);">
+            <span>US-West<br>Protected</span>
           </div>
-          <div class="stack-row">
-            <span class="n">04</span>
-            <span class="name">Object storage <small>S3-compatible, no egress fees</small></span>
-            <span class="v">Cloudflare R2</span>
-          </div>
-          <div class="stack-row">
-            <span class="n">05</span>
-            <span class="name">Cache &amp; queue <small>Background workers, retries, scheduling</small></span>
-            <span class="v">Redis + BullMQ</span>
-          </div>
-          <div class="stack-row">
-            <span class="n">06</span>
-            <span class="name">UI <small>Accessible primitives, motion-friendly</small></span>
-            <span class="v">Tailwind v4 + Radix</span>
-          </div>
-          <div class="stack-row">
-            <span class="n">07</span>
-            <span class="name">Deployment <small>One command, zero-downtime updates</small></span>
-            <span class="v">Docker + Nginx + Certbot</span>
-          </div>
-        </div>
+        </article>
       </div>
     </section>
 
-    <!-- ============================================
-         DEPLOY
-         ============================================ -->
-    <section id="deploy" class="deploy-section">
-      <div class="deploy-slab">
-        <div class="section-num" style="justify-content:center">04 — Deploy</div>
-        <h2 class="reveal" style="margin-top:16px">One command.<br/>Fresh VPS.</h2>
-        <p class="lead reveal reveal-d-1">Installs Docker, clones the repo, opens the .env for you to fill in, issues the certificate, builds, and health-checks.</p>
-
-        <div class="deploy-cmd reveal reveal-d-2">
-          <div class="deploy-cmd-head">
-            <div class="dots"><span></span><span></span><span></span></div>
-            <span class="label"><span class="live"></span>ubuntu@sewanode</span>
-            <span class="label">bash</span>
-          </div>
-          <div class="deploy-cmd-body">
-<span class="pr">$</span>curl <span class="flag">-fsSL</span> <span class="str">https://raw.githubusercontent.com/AFR-projection/Aether-Cosmos/main/scripts/deploy/setup.sh</span> <span class="pipe">|</span> bash
-          </div>
-          <div class="deploy-cmd-foot">
-            <span><span class="key">↑</span> <span class="key">↓</span> history · <span class="key">tab</span> complete</span>
-            <span>~ 90s install · 1 VPS · 0 dependencies</span>
-          </div>
-        </div>
-
-        <p class="reveal reveal-d-3" style="margin-top:24px;font-family:var(--f-mono);font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em">
-          Then manage with: <code style="color:var(--accent)">aether</code> update · status · logs
-        </p>
-
-        <div class="deploy-actions reveal reveal-d-3">
-          <a class="btn btn-primary btn-lg" href="https://github.com/AFR-projection/Aether-Cosmos" target="_blank" rel="noopener">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.13c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.24 2.75.12 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5Z"/></svg>
-            View on GitHub <span class="arrow">→</span>
-          </a>
-          <a class="btn btn-ghost btn-lg" href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/README.md" target="_blank" rel="noopener">Read the docs</a>
-        </div>
+    <section id="noema-support" style="position:relative; min-height:100vh; background:#000000; color:white; overflow:hidden; padding:0 1.25rem; display:flex; align-items:center; font-family:'Inter',sans-serif">
+      <h2 style="position:absolute; z-index:0; color:rgba(0,0,0,0.35); font-weight:800; font-size:clamp(8rem,28vw,30rem); line-height:0.78; letter-spacing:-0.055em; white-space:nowrap; left:50%; top:46%; transform:translate(-50%,-50%);">SCALE</h2>
+      <div style="position: relative; z-index: 10; width: 100%; max-width: 72rem; margin: 0px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; padding: 5rem 0px;">
+        <article style="border:1px solid rgba(255,255,255,0.28); background:#050505; color:white; min-height:310px; padding:1.25rem;">
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">01 / Ingestion</p>
+          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">COLLECTED</h3>
+          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">Raw data is securely ingested from enterprise edge nodes instantly.</p>
+        </article>
+        <article style="border:1px solid rgba(0,0,0,0.1); background:white; color:#050505; min-height:310px; padding:1.25rem;">
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(0,0,0,0.45);">02 / Synthesis</p>
+          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">PROCESSED</h3>
+          <button style="margin-top: 2rem; width: 100%; background: rgb(5, 5, 5); color: white; font-size: 0.875rem; font-weight: 500; padding: 0.75rem; border: medium; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">View Metrics</button>
+        </article>
+        <article style="border:1px solid rgba(255,255,255,0.28); background:#050505; color:white; min-height:310px; padding:1.25rem;">
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(255,255,255,0.45);">03 / Output</p>
+          <h3 style="font-weight:700; font-size:clamp(3rem,5vw,3.75rem); line-height:1; margin-top:1.5rem; letter-spacing:-0.025em;">DEPLOYED</h3>
+          <p style="font-size:0.875rem; color:rgba(255,255,255,0.58); margin-top:1.5rem; max-width:220px;">Actionable insights deployed directly into your operational pipelines.</p>
+        </article>
       </div>
     </section>
 
-    <!-- ============================================
-         FOOTER
-         ============================================ -->
-    <footer>
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="brand">
-            <svg class="brand-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="13" stroke="rgba(129,140,248,0.2)" stroke-width="0.6" fill="none"/>
-              <circle cx="16" cy="16" r="5.5" fill="url(#g)"/>
-            </svg>
-            Aether <span style="color:var(--accent)">Cosmos</span>
+    <!-- FOOTER -->
+    <footer class="mx-auto px-6 py-16 max-w-[77.5rem] border-t border-white/[0.06]">
+      <div class="flex flex-col md:flex-row justify-between gap-10">
+        <div>
+          <span class="text-sm font-medium tracking-tighter uppercase text-white">Nexus AI</span>
+          <p class="text-sm mt-4 text-[#7d7a73]" style="max-width:17.5rem;">Cinematic AI agent experiences, deployed instantly across the cloud.</p>
+        </div>
+        <div class="flex gap-16 text-sm text-[#9c988f]">
+          <div class="flex flex-col gap-3">
+            <a href="#" class="hover:text-white transition-colors">Deploy</a>
+            <a href="#" class="hover:text-white transition-colors">Clusters</a>
+            <a href="#" class="hover:text-white transition-colors">Enterprise</a>
           </div>
-          <p>Self-hosted cloud storage with a Second Brain knowledge layer for AI agents. Built by ByAFR, v0.4.0.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <ul>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#brain">Second Brain</a></li>
-            <li><a href="#stack">Stack</a></li>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/README.md">Documentation</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
-          <ul>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos">GitHub</a></li>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/getting-started.md">Getting started</a></li>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/deployment.md">Deployment</a></li>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/api-reference.md">API reference</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/LICENSE">License</a></li>
-            <li><a href="https://github.com/AFR-projection/Aether-Cosmos/blob/main/docs/security.md">Security</a></li>
-          </ul>
+          <div class="flex flex-col gap-3">
+            <a href="#" class="hover:text-white transition-colors">Documentation</a>
+            <a href="#" class="hover:text-white transition-colors">Changelog</a>
+            <a href="#" class="hover:text-white transition-colors">API</a>
+          </div>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2026 ByAFR · Aether Cosmos · Private</span>
-        <span>v0.4.0 · last deploy 17m ago</span>
+      <div class="mt-16 flex items-center justify-between">
+        <p class="text-xs text-[#5c5a55]">© 2026 Nexus AI. All rights reserved.</p>
       </div>
     </footer>
 
-  </div>
+    <script>
+      (function(){
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        let W, H, petals = [];
 
-  <!-- ============================================
-       Three.js cosmos
-       ============================================ -->
-  <script type="importmap">
-  { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-  </script>
-  <script type="module">
-    import * as THREE from 'three';
+        function resize(){
+          W = canvas.width = innerWidth * devicePixelRatio;
+          H = canvas.height = innerHeight * devicePixelRatio;
+        }
 
-    const canvas = document.getElementById('cosmos-canvas');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        resize();
+        addEventListener('resize', resize);
 
-    let renderer;
-    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); }
-    catch (e) { canvas.classList.add('fallback'); throw e; }
+        for(let i=0; i<70; i++){
+          petals.push({
+            x: Math.random(), y: Math.random(), r: 6 + Math.random() * 14,
+            sp: 0.2 + Math.random() * 0.8, drift: Math.random() * Math.PI * 2,
+            a: 0.3 + Math.random() * 0.5
+          });
+        }
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x050608, 1);
+        let petalDensity = 0, windAmt = 0;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.z = 50;
-
-    // Stars
-    function makeStars(count, spread, size, color) {
-      const g = new THREE.BufferGeometry();
-      const p = new Float32Array(count * 3);
-      const c = new Float32Array(count * 3);
-      const s = new Float32Array(count);
-      const col = new THREE.Color(color);
-      for (let i = 0; i < count; i++) {
-        p[i*3] = (Math.random() - 0.5) * spread;
-        p[i*3+1] = (Math.random() - 0.5) * spread;
-        p[i*3+2] = (Math.random() - 0.5) * spread;
-        const t = col.clone().lerp(new THREE.Color(0xffffff), Math.random() * 0.7);
-        c[i*3] = t.r; c[i*3+1] = t.g; c[i*3+2] = t.b;
-        s[i] = size * (0.5 + Math.random() * 1.5);
-      }
-      g.setAttribute('position', new THREE.BufferAttribute(p, 3));
-      g.setAttribute('color', new THREE.BufferAttribute(c, 3));
-      g.setAttribute('aSize', new THREE.BufferAttribute(s, 1));
-      return g;
-    }
-    const starMat = new THREE.ShaderMaterial({
-      uniforms: { uTime: { value: 0 }, uPixelRatio: { value: renderer.getPixelRatio() } },
-      vertexShader: `
-        attribute float aSize;
-        varying vec3 vColor;
-        uniform float uTime;
-        uniform float uPixelRatio;
-        void main() {
-          vColor = color;
-          vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          float t = sin(uTime * 0.6 + position.x * 0.5 + position.y * 0.3) * 0.5 + 0.5;
-          t = mix(0.4, 1.0, t);
-          gl_PointSize = aSize * uPixelRatio * t * (300.0 / -mv.z);
-          gl_Position = projectionMatrix * mv;
-        }`,
-      fragmentShader: `
-        varying vec3 vColor;
-        void main() {
-          vec2 c = gl_PointCoord - 0.5;
-          float d = length(c);
-          float alpha = smoothstep(0.5, 0.0, d);
-          alpha *= smoothstep(0.5, 0.15, d);
-          if (alpha < 0.01) discard;
-          gl_FragColor = vec4(vColor, alpha);
-        }`,
-      transparent: true, depthWrite: false, vertexColors: true, blending: THREE.AdditiveBlending
-    });
-    const starsFar = new THREE.Points(makeStars(2500, 800, 1.0, 0x6ee7b7), starMat);
-    const starsMid = new THREE.Points(makeStars(1500, 400, 1.6, 0xffffff), starMat);
-    const starsNear = new THREE.Points(makeStars(600, 200, 2.4, 0xb6ffe4), starMat);
-    scene.add(starsFar, starsMid, starsNear);
-
-    // Nebula
-    function makeNebula(color, size = 400) {
-      const c = document.createElement('canvas'); c.width = c.height = 256;
-      const ctx = c.getContext('2d');
-      const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
-      const col = new THREE.Color(color);
-      g.addColorStop(0, `rgba(${Math.floor(col.r*255)},${Math.floor(col.g*255)},${Math.floor(col.b*255)},0.5)`);
-      g.addColorStop(0.4, `rgba(${Math.floor(col.r*255)},${Math.floor(col.g*255)},${Math.floor(col.b*255)},0.12)`);
-      g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 256, 256);
-      const t = new THREE.CanvasTexture(c);
-      const m = new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.6 });
-      const s = new THREE.Sprite(m); s.scale.set(size, size, 1);
-      return s;
-    }
-    const nebulas = [
-      { s: makeNebula(0x4ade80, 500), p: new THREE.Vector3(-30, 20, -100) },
-      { s: makeNebula(0x22d3ee, 380), p: new THREE.Vector3(40, -10, -130) },
-      { s: makeNebula(0x6366f1, 450), p: new THREE.Vector3(0, -30, -80) },
-      { s: makeNebula(0x10b981, 320), p: new THREE.Vector3(-50, -20, -120) }
-    ];
-    nebulas.forEach(n => { n.s.position.copy(n.p); scene.add(n.s); });
-
-    // Planet
-    const planet = new THREE.Mesh(
-      new THREE.SphereGeometry(2.5, 64, 64),
-      new THREE.ShaderMaterial({
-        uniforms: { uTime: { value: 0 } },
-        vertexShader: `varying vec3 vN; varying vec3 vP; void main() { vN = normalize(normalMatrix * normal); vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-        fragmentShader: `
-          varying vec3 vN; varying vec3 vP; uniform float uTime;
-          float hash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
-          float noise(vec3 p) {
-            vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
-            return mix(mix(mix(hash(i+vec3(0,0,0)),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
-                       mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);
+        function drawPetals(t){
+          ctx.clearRect(0, 0, W, H);
+          for(const p of petals){
+            const px = (p.x + Math.sin(t*0.0003*p.sp + p.drift)*0.04*(0.5+windAmt*2)) * W;
+            const py = (((p.y + t*0.00004*p.sp) % 1)) * H;
+            const size = p.r * devicePixelRatio * (0.7 + petalDensity*0.8);
+            ctx.globalAlpha = p.a * petalDensity;
+            const g = ctx.createRadialGradient(px, py, 0, px, py, size);
+            g.addColorStop(0, 'rgba(247,196,218,0.9)');
+            g.addColorStop(1, 'rgba(194,106,151,0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.ellipse(px, py, size, size*0.6, p.drift + t*0.0002, 0, Math.PI*2);
+            ctx.fill();
           }
-          void main() {
-            float lat = vP.y;
-            vec3 deep = vec3(0.01,0.03,0.06);
-            vec3 sea = vec3(0.02,0.20,0.25);
-            vec3 land = vec3(0.05,0.40,0.22);
-            vec3 ice = vec3(0.85,0.95,0.95);
-            float n = noise(vP * 1.2);
-            float continents = smoothstep(0.45, 0.6, n);
-            float ice_band = smoothstep(0.7, 0.95, abs(lat / 2.5));
-            vec3 base = mix(sea, land, continents);
-            base = mix(base, ice, ice_band);
-            float light = clamp(dot(vN, normalize(vec3(0.5,0.3,0.8))), 0.0, 1.0);
-            vec3 col = base * (0.25 + 0.85 * light);
-            float rim = pow(1.0 - max(0.0, dot(vN, vec3(0.0,0.0,1.0))), 2.0);
-            col += vec3(0.3, 0.9, 0.6) * rim * 0.4;
-            gl_FragColor = vec4(col, 1.0);
-          }`
-      })
-    );
-    const atmo = new THREE.Mesh(
-      new THREE.SphereGeometry(2.7, 32, 32),
-      new THREE.ShaderMaterial({
-        vertexShader: `varying vec3 vN; void main() { vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-        fragmentShader: `varying vec3 vN; void main() { float i = pow(0.7 - dot(vN, vec3(0.0,0.0,1.0)), 2.5); gl_FragColor = vec4(0.3, 0.95, 0.6, i * 0.6); }`,
-        side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false
-      })
-    );
-    const ring = new THREE.Mesh(
-      new THREE.RingGeometry(3.5, 5.5, 64, 1),
-      new THREE.ShaderMaterial({
-        uniforms: { uTime: { value: 0 } },
-        vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-        fragmentShader: `varying vec2 vUv; uniform float uTime; void main() { float a = sin(vUv.x * 6.28) * 0.5 + 0.5; a = pow(a, 1.5); vec3 c1 = vec3(0.3, 0.9, 0.6); vec3 c2 = vec3(0.2, 0.4, 0.6); vec3 col = mix(c1, c2, vUv.y); float fade = sin(vUv.y * 3.14); gl_FragColor = vec4(col, a * fade * 0.45); }`,
-        transparent: true, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
-      })
-    );
-    ring.rotation.x = -Math.PI / 2.6;
-    const moon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), new THREE.MeshBasicMaterial({ color: 0xcfeee0 }));
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(drawPetals);
+        }
 
-    const planetGroup = new THREE.Group();
-    planetGroup.add(planet, atmo, ring, moon);
-    planetGroup.position.set(28, 8, -20);
-    planetGroup.scale.setScalar(1.6);
-    scene.add(planetGroup);
+        if(!reduce) requestAnimationFrame(drawPetals);
 
-    // Shooting stars
-    const shootingStars = [];
-    function spawnShootingStar() {
-      const g = new THREE.BufferGeometry();
-      const len = 8;
-      g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0,0,0,-len,0,0]), 3));
-      const m = new THREE.LineBasicMaterial({ color: 0xa7ffe6, transparent: true, opacity: 1, blending: THREE.AdditiveBlending });
-      const line = new THREE.Line(g, m);
-      line.position.set((Math.random() - 0.5) * 100, 30 + Math.random() * 20, -30 - Math.random() * 30);
-      line.userData = { vx: -0.6 - Math.random() * 0.4, vy: -0.4 - Math.random() * 0.3, life: 1.0 };
-      scene.add(line);
-      shootingStars.push(line);
-    }
+        const beats = [
+          {el: document.querySelector('[data-beat="0"]'), s: 0.00, e: 0.10},
+          {el: document.querySelector('[data-beat="1"]'), s: 0.11, e: 0.22},
+          {el: document.querySelector('[data-beat="2"]'), s: 0.23, e: 0.33},
+          {el: document.querySelector('[data-beat="3"]'), s: 0.34, e: 0.47},
+          {el: document.querySelector('[data-beat="4"]'), s: 0.48, e: 0.64},
+          {el: document.querySelector('[data-beat="5"]'), s: 0.65, e: 0.81},
+          {el: document.querySelector('[data-beat="6"]'), s: 0.82, e: 1.00}
+        ];
 
-    // Cursor particles
-    const cursorPositions = new Float32Array(300 * 3);
-    const cursorGeom = new THREE.BufferGeometry();
-    cursorGeom.setAttribute('position', new THREE.BufferAttribute(cursorPositions, 3));
-    const cursorPoints = new THREE.Points(cursorGeom, new THREE.PointsMaterial({ color: 0x4ade80, size: 0.15, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }));
-    scene.add(cursorPoints);
-    let cursorWrite = 0;
+        function beatOpacity(p, s, e){
+          const mid = (s+e)/2, span = (e-s);
+          const fade = span*0.30;
+          if(p < s || p > e) return 0;
+          if(p < s+fade) return (p-s)/fade;
+          if(p > e-fade) return (e-p)/fade;
+          return 1;
+        }
 
-    const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-    window.addEventListener('mousemove', (e) => {
-      const r = canvas.getBoundingClientRect();
-      mouse.tx = ((e.clientX - r.left) / r.width) * 2 - 1;
-      mouse.ty = -((e.clientY - r.top) / r.height) * 2 + 1;
-      cursorPositions[cursorWrite*3] = mouse.tx * (window.innerWidth / 2) / 50 * 50;
-      cursorPositions[cursorWrite*3+1] = mouse.ty * 30;
-      cursorPositions[cursorWrite*3+2] = -10;
-      cursorWrite = (cursorWrite + 1) % 300;
-      cursorGeom.attributes.position.needsUpdate = true;
-    });
+        const dotRow = document.getElementById('dotRow');
+        beats.forEach((b,i)=>{
+          const d = document.createElement('span');
+          d.style.cssText = 'width:0.5rem;height:0.5rem;border-radius:50%;background:rgba(255,255,255,0.25);transition:background .3s,transform .3s;cursor:pointer;';
+          d.addEventListener('click',()=>{
+            const sec = document.getElementById('cinematic');
+            const top = sec.offsetTop + ((b.s+b.e)/2) * (sec.offsetHeight - innerHeight);
+            scrollTo({top, behavior:'smooth'});
+          });
+          dotRow.appendChild(d);
+          b.dot = d;
+        });
 
-    const clock = new THREE.Clock();
-    let lastShoot = 0;
-    function animate() {
+        const section = document.getElementById('cinematic');
+        const bgLayer = document.getElementById('bgLayer');
+        const midLayer = document.getElementById('midLayer');
+        const bouquet = document.getElementById('bouquet');
+        const grade = document.getElementById('gradeWash');
+        const lbTop = document.getElementById('lbTop');
+        const lbBot = document.getElementById('lbBot');
+        const tlFill = document.getElementById('timelineFill');
+        const timeLabel = document.getElementById('timeLabel');
+        const DUR = 12.75;
+
+        let rawP = 0, renderP = 0;
+
+        function raf(){
+          renderP += (rawP - renderP) * 0.10;
+          const p = renderP;
+
+          const scale = 1 + p*0.55 - Math.max(0, p-0.48)*0.35;
+          const roll = p*4 - Math.max(0, p-0.65)*3;
+          const fwd = p*-40;
+
+          bouquet.style.transform = `scale(${scale}) rotate(${roll}deg) translateY(${fwd}px)`;
+          bgLayer.style.transform = `scale(${1.1+p*0.15}) translateY(${p*-60}px)`;
+          midLayer.style.transform = `translateY(${p*30}px)`;
+
+          petalDensity = p < 0.48 ? p*0.3 : Math.min(1, (p-0.40)*2.2);
+          windAmt = Math.max(0, (p-0.60))*1.4;
+
+          grade.style.opacity = 0.4 + Math.sin(p*Math.PI)*0.5;
+
+          let lb = 0;
+          if(p < 0.06) lb = (p/0.06)*7;
+          else if(p > 0.92) lb = 7 * (1-(p-0.92)/0.08);
+          else lb = 7;
+
+          lbTop.style.height = lb+'vh';
+          lbBot.style.height = lb+'vh';
+
+          tlFill.style.width = (p*100)+'%';
+          timeLabel.textContent = (p*DUR).toFixed(2)+'s';
+
+          beats.forEach(b=>{
+            const o = beatOpacity(p, b.s, b.e);
+            b.el.style.opacity = o.toFixed(3);
+            b.el.style.transform = `translateY(${(1-o)*18}px)`;
+            const active = p >= b.s && p <= b.e;
+            b.dot.style.background = active ? '#f5b8d0' : 'rgba(255,255,255,0.25)';
+            b.dot.style.transform = active ? 'scale(1.4)' : 'scale(1)';
+          });
+
+          requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        function updateScroll(){
+          const rect = section.getBoundingClientRect();
+          const travel = section.offsetHeight - innerHeight;
+          const scrolled = Math.min(Math.max(-rect.top, 0), travel);
+          rawP = travel > 0 ? scrolled/travel : 0;
+          if(reduce) renderP = rawP;
+        }
+
+        addEventListener('scroll', updateScroll, {passive: true});
+        updateScroll();
+
+        if(window.gsap && window.ScrollTrigger && !reduce){
+          gsap.registerPlugin(ScrollTrigger);
+
+          document.querySelectorAll('.reveal-line').forEach(line=>{
+            const inner = line.firstElementChild;
+            gsap.set(inner, {yPercent: 120});
+            gsap.to(inner, {
+              yPercent: 0, duration: 0.9, ease: 'power3.out',
+              scrollTrigger: { trigger: line, start: 'top 85%' }
+            });
+          });
+
+          gsap.utils.toArray('.fade-card').forEach((c, i)=>{
+            gsap.from(c, {
+              opacity: 0, y: 40, duration: 0.7, ease: 'power2.out', delay: i*0.1,
+              scrollTrigger: { trigger: c, start: 'top 88%' }
+            });
+          });
+
+          gsap.to('#craftBg', {
+            yPercent: 20, ease: 'none',
+            scrollTrigger: { trigger: '#craft', start: 'top bottom', end: 'bottom top', scrub: true }
+          });
+        }
+      })();
+    </script>
+
+    <script type="importmap">
+      { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+    </script>
+    <script type="module">
+      import * as THREE from 'three';
+      import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+      import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+      import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = matchMedia('(max-width: 768px)').matches;
+      const canvas = document.getElementById('particlesBg');
+      if (canvas) {
+      const COUNT = isMobile ? 4000 : 12000;
+      const rand = Math.random, gauss = () => (rand() + rand() + rand() - 1.5) * 0.8;
+      const posArr = new Float32Array(COUNT * 3), ringId = new Float32Array(COUNT), seeds = new Float32Array(COUNT), scales = new Float32Array(COUNT);
+      const rings = [{ r: 6.4, tx: -0.5, tz: 0 }, { r: 5.3, tx: 0.9, tz: 0.7 }, { r: 4.2, tx: 0.25, tz: -1.1 }];
+      for (let i = 0; i < COUNT; i++) {
+      const i3 = i * 3, pick = rand();
+      seeds[i] = rand(); scales[i] = seeds[i] > 0.985 ? 2.4 : 0.5 + rand() * 0.9;
+      if (pick < 0.12) { ringId[i] = 4; let x = gauss(), y = gauss(), z = gauss(); const n = Math.hypot(x, y, z) || 1, r = 7.5 + rand() * 5.5; posArr[i3] = x / n * r; posArr[i3 + 1] = y / n * r; posArr[i3 + 2] = z / n * r; continue; }
+      if (pick < 0.24) { ringId[i] = 3; let x = gauss(), y = gauss(), z = gauss(); const n = Math.hypot(x, y, z) || 1, r = 1.7 * Math.cbrt(rand()); posArr[i3] = x / n * r; posArr[i3 + 1] = y / n * r; posArr[i3 + 2] = z / n * r; continue; }
+      ringId[i] = i % 3; const ring = rings[i % 3], ang = rand() * Math.PI * 2;
+      const x = Math.cos(ang) * ring.r + gauss() * 0.07, y = gauss() * 0.07, z = Math.sin(ang) * ring.r + gauss() * 0.07;
+      let y2 = y * Math.cos(ring.tx) - z * Math.sin(ring.tx); const z2 = y * Math.sin(ring.tx) + z * Math.cos(ring.tx);
+      const x2 = x * Math.cos(ring.tz) - y2 * Math.sin(ring.tz); y2 = x * Math.sin(ring.tz) + y2 * Math.cos(ring.tz);
+      posArr[i3] = x2; posArr[i3 + 1] = y2; posArr[i3 + 2] = z2;
+      }
+      const SNOISE = `
+      vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
+      vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
+      vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
+      vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+      float snoise(vec3 v){const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;i=mod289(i);vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}`;
+      const VERT = `attribute float aSeed;attribute float aScale;attribute float aRing;uniform float uTime;uniform float uSize;uniform float uPixelRatio;uniform vec3 uColor;uniform vec3 uCore;uniform vec3 uRing0;uniform vec3 uRing1;uniform vec3 uRing2;varying vec3 vColor;varying float vTwinkle;` + SNOISE + `
+      void main(){
+      vec3 pos=position;
+      if(aRing<2.5){vec3 ax=aRing<0.5?normalize(vec3(1.0,0.18,0.0)):aRing<1.5?normalize(vec3(0.0,1.0,0.22)):normalize(vec3(0.25,0.0,1.0));float ang=uTime*(aRing<0.5?0.24:aRing<1.5?-0.38:0.55);float c=cos(ang),s=sin(ang);pos=pos*c+cross(ax,pos)*s+ax*dot(ax,pos)*(1.0-c);}
+      vec3 np=pos*0.2+vec3(uTime*0.18)+aSeed*6.28;
+      pos+=vec3(snoise(np),snoise(np+31.7),snoise(np+74.3))*0.13;
+      pos.x+=sin(uTime*0.9+aSeed*40.0)*0.05;
+      pos.y+=cos(uTime*0.7+aSeed*30.0)*0.05;
+      vColor=uColor;
+      if(aRing<2.5){vColor=aRing<0.5?uRing0:aRing<1.5?uRing1:uRing2;}
+      vColor=mix(vColor,uCore,smoothstep(2.5,1.4,length(pos)));
+      vColor=mix(vColor,vec3(1.0),step(0.985,aSeed)*0.9);
+      vTwinkle=0.6+0.4*sin(uTime*(0.6+aSeed*1.8)+aSeed*20.0);
+      vec4 mv=modelViewMatrix*vec4(pos,1.0);
+      gl_PointSize=uSize*aScale*uPixelRatio*(12.0/-mv.z);
+      gl_Position=projectionMatrix*mv;
+      }`;
+      const FRAG = `precision mediump float;uniform float uOpacity;varying vec3 vColor;varying float vTwinkle;
+      void main(){float d=length(gl_PointCoord-0.5);float alpha=smoothstep(0.5,0.12,d);alpha+=smoothstep(0.12,0.0,d)*0.5;gl_FragColor=vec4(vColor,alpha*vTwinkle*uOpacity);}`;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+      const pr = Math.min(devicePixelRatio, isMobile ? 1.25 : 1.75);
+      renderer.setPixelRatio(pr);
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.1;
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#0a0a0c');
+      const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
+      camera.position.z = 14.5;
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+      geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
+      geo.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
+      geo.setAttribute('aRing', new THREE.BufferAttribute(ringId, 1));
+      const uniforms = { uTime: { value: 0 }, uSize: { value: 3.0 }, uPixelRatio: { value: pr }, uOpacity: { value: 0.8 }, uColor: { value: new THREE.Color('#f5b8d0') }, uCore: { value: new THREE.Color('#ffd9e8') }, uRing0: { value: new THREE.Color('#c26a97') }, uRing1: { value: new THREE.Color('#f5b8d0') }, uRing2: { value: new THREE.Color('#ffe3ef') } };
+      const mat = new THREE.ShaderMaterial({ uniforms, vertexShader: VERT, fragmentShader: FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+      const group = new THREE.Group();
+      group.add(new THREE.Points(geo, mat));
+      scene.add(group);
+      let composer = null;
+      if (!isMobile && !reduced) {
+      composer = new EffectComposer(renderer);
+      composer.addPass(new RenderPass(scene, camera));
+      composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.85, 0.55, 0.12));
+      }
+      let mx = 0, my = 0, tmx = 0, tmy = 0;
+      addEventListener('pointermove', (e) => { tmx = e.clientX / innerWidth - 0.5; tmy = e.clientY / innerHeight - 0.5; });
+      const clock = new THREE.Clock();
+      function frame() {
       const t = clock.getElapsedTime();
-      mouse.x += (mouse.tx - mouse.x) * 0.05;
-      mouse.y += (mouse.ty - mouse.y) * 0.05;
-      camera.position.x = mouse.x * 3;
-      camera.position.y = mouse.y * 2;
-      camera.lookAt(0, 0, 0);
-
-      if (!reduceMotion) {
-        starsFar.rotation.y = t * 0.005;
-        starsMid.rotation.y = t * 0.012;
-        starsNear.rotation.y = t * 0.025;
+      uniforms.uTime.value = t;
+      mx += (tmx - mx) * 0.04;
+      my += (tmy - my) * 0.04;
+      group.rotation.y = mx * 0.35 + t * 0.06 + Math.sin(t * 0.07) * 0.06;
+      group.rotation.x = my * 0.22 + Math.sin(t * 0.23) * 0.1;
+      composer ? composer.render() : renderer.render(scene, camera);
+      requestAnimationFrame(frame);
       }
-      starMat.uniforms.uTime.value = t;
-      planet.rotation.y = t * 0.1;
-      moon.position.set(Math.cos(t * 0.6) * 6, Math.sin(t * 0.4) * 0.5, Math.sin(t * 0.6) * 6);
-
-      if (!reduceMotion && t - lastShoot > 3 + Math.random() * 5) { spawnShootingStar(); lastShoot = t; }
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const s = shootingStars[i];
-        s.position.x += s.userData.vx; s.position.y += s.userData.vy;
-        s.userData.life -= 0.012; s.material.opacity = s.userData.life;
-        if (s.userData.life <= 0) { scene.remove(s); s.geometry.dispose(); s.material.dispose(); shootingStars.splice(i, 1); }
-      }
-      nebulas.forEach((n, i) => { n.s.position.x = n.p.x + Math.sin(t * 0.05 + i) * 4; n.s.position.y = n.p.y + Math.cos(t * 0.04 + i) * 3; });
-
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      if (reduced) { uniforms.uTime.value = 1; renderer.render(scene, camera); } else { requestAnimationFrame(frame); }
+      addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Nav scroll state + active section
-    const nav = document.getElementById('nav');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    function updateNav() {
-      if (!nav) return;
-      if (window.scrollY > 24) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
-      const ids = ['features', 'brain', 'stack', 'deploy'];
-      const scrollY = window.scrollY + 140;
-      let active = null;
-      for (const id of ids) {
-        const s = document.getElementById(id);
-        if (s && s.offsetTop <= scrollY) active = id;
+      renderer.setSize(innerWidth, innerHeight);
+      composer && composer.setSize(innerWidth, innerHeight);
+      });
       }
-      navLinks.forEach(a => {
-        const href = a.getAttribute('href').slice(1);
-        a.classList.toggle('active', href === active);
-      });
-    }
-    window.addEventListener('scroll', updateNav, { passive: true });
-    window.addEventListener('load', updateNav);
-    updateNav();
+    </script>
 
-    // Reveal on scroll
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
-    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    <script>
+      (function() {
+        const cards = document.querySelectorAll('.fade-card');
+        cards.forEach(card => {
+          card.style.transformStyle = 'preserve-3d';
+          const img = card.querySelector('.rounded-xl');
+          const content = card.querySelector('.flex-grow');
 
-    // Bento hover spotlight
-    document.querySelectorAll('.bento-card').forEach((f) => {
-      f.addEventListener('mousemove', (e) => {
-        const r = f.getBoundingClientRect();
-        f.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-        f.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-      });
-    });
-  </script>
-</body>
-</html>
+          card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            card.style.transition = 'transform 0.1s ease-out';
+            card.style.zIndex = '10';
+
+            if (img) {
+              img.style.transform = 'translateZ(30px)';
+              img.style.transition = 'transform 0.1s ease-out';
+            }
+            if (content) {
+              content.style.transform = 'translateZ(20px)';
+              content.style.transition = 'transform 0.1s ease-out';
+            }
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            card.style.transition = 'transform 0.5s ease-out';
+            card.style.zIndex = '1';
+
+            if (img) {
+              img.style.transform = 'translateZ(0px)';
+              img.style.transition = 'transform 0.5s ease-out';
+            }
+            if (content) {
+              content.style.transform = 'translateZ(0px)';
+              content.style.transition = 'transform 0.5s ease-out';
+            }
+          });
+        });
+      })();
+    </script>
+
+    <script>
+      (function(){function init(){if(!window.gsap||!window.ScrollTrigger)return;gsap.registerPlugin(ScrollTrigger);var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduce)return;var cards=gsap.utils.toArray('#collection .fade-card');if(cards.length){gsap.fromTo(cards,{x:function(i){return[-260,0,240][i]||0;},y:function(i){return[-80,120,-80][i]||0;},rotate:function(i){return[-14,0,14][i]||0;},scale:0.86,autoAlpha:0.4},{x:0,y:0,rotate:0,scale:1,autoAlpha:1,stagger:0.05,ease:'none',scrollTrigger:{trigger:'#collection',start:'top 80%',end:'top 20%',scrub:1}});}gsap.fromTo('#collection [data-scroll-word]',{y:'6vh',scale:1.04},{y:'-4vh',scale:0.99,ease:'none',scrollTrigger:{trigger:'#collection',start:'top bottom',end:'bottom top',scrub:1}});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
+    </script>
+
+    <script>
+      (function(){function init(){if(!window.gsap||!window.ScrollTrigger)return;gsap.registerPlugin(ScrollTrigger);var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduce)return;
+      gsap.to('#bgLayer',{yPercent:18,ease:'none',scrollTrigger:{trigger:'#cinematic',start:'top top',end:'bottom top',scrub:1}});
+      gsap.utils.toArray('#integration .fade-card').forEach(function(c,i){gsap.fromTo(c,{y:60,rotateX:12,autoAlpha:0,transformPerspective:900},{y:0,rotateX:0,autoAlpha:1,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:c,start:'top 88%'}});});
+      gsap.to('#craft .reveal-line',{yPercent:-15,ease:'none',scrollTrigger:{trigger:'#craft',start:'top bottom',end:'bottom top',scrub:1}});
+      var words=gsap.utils.toArray('#noema-manifesto span[style*="font-weight:800"]');
+      if(words.length){gsap.fromTo(words,{autoAlpha:0.12,y:'0.4em'},{autoAlpha:1,y:'0em',ease:'none',stagger:0.4,scrollTrigger:{trigger:'#noema-manifesto',start:'top 70%',end:'center center',scrub:1}});}
+      gsap.to('#noema-board h2',{yPercent:-14,ease:'none',scrollTrigger:{trigger:'#noema-board',start:'top bottom',end:'bottom top',scrub:1}});
+      gsap.utils.toArray('#noema-board article').forEach(function(a,i){gsap.fromTo(a,{y:70,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power3.out',delay:i*0.08,scrollTrigger:{trigger:'#noema-board',start:'top 75%'}});});
+      gsap.to('#noema-support h2',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'#noema-support',start:'top bottom',end:'bottom top',scrub:1}});
+      gsap.utils.toArray('#noema-support article').forEach(function(a,i){gsap.fromTo(a,{y:90,rotateX:8,autoAlpha:0,transformPerspective:900},{y:0,rotateX:0,autoAlpha:1,duration:0.9,ease:'power3.out',delay:i*0.1,scrollTrigger:{trigger:'#noema-support',start:'top 72%'}});});
+      gsap.fromTo('footer > div',{y:40,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power2.out',scrollTrigger:{trigger:'footer',start:'top 90%'}});
+      var mag=document.querySelectorAll('nav a, nav button, #craft a, #noema-support button, footer a');
+      mag.forEach(function(el){el.style.willChange='transform';el.style.display=el.style.display||'inline-flex';el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect();var mx=(e.clientX-r.left-r.width/2)/r.width;var my=(e.clientY-r.top-r.height/2)/r.height;gsap.to(el,{x:mx*6,y:my*4,duration:0.4,ease:'power2.out'});});el.addEventListener('mouseleave',function(){gsap.to(el,{x:0,y:0,duration:0.5,ease:'elastic.out(1,0.4)'});});});
+      document.querySelectorAll('#dotRow span').forEach(function(d){d.addEventListener('mouseenter',function(){gsap.to(d,{scale:1.8,duration:0.3,ease:'back.out(2)'});});d.addEventListener('mouseleave',function(){gsap.to(d,{scale:1,duration:0.3});});});
+      }if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
+    </script>
+  
+</body></html>
