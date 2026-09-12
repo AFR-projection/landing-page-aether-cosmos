@@ -54,11 +54,18 @@
         <style>
           @keyframes cosmosFloat {
             0%   { transform: translateY(0); }
-            50%  { transform: translateY(-1.25rem); }
+            50%  { transform: translateY(-0.9rem); }
             100% { transform: translateY(0); }
           }
-          #bouquet {
-            animation: cosmosFloat 5s ease-in-out infinite;
+          /* float lives on inner wrapper — #bouquet transform is owned by scroll JS */
+          #bouquetInner {
+            animation: cosmosFloat 7s ease-in-out infinite;
+            will-change: transform;
+          }
+          .tw { animation: tw 2.8s ease-in-out infinite; }
+          @keyframes tw { 0%,100% { opacity: .15; } 50% { opacity: .9; } }
+          @media (prefers-reduced-motion: reduce) {
+            #bouquetInner, .tw { animation: none; }
           }
           /* 2026-09-12 build: hero responsiveness + contrast */
           [data-beat] p.text-sm{color:#d0d6e0;}
@@ -93,6 +100,7 @@
             <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
               <div style="display: flex; align-items: center; justify-content: center">
                 <div id="bouquet" class="z-40 relative" style="width: min(56vw, 40rem); aspect-ratio: 16 / 11; will-change: transform; z-index: 40;">
+                  <div id="bouquetInner" style="width:100%; height:100%;">
                   <svg viewBox="0 0 480 330" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
                     <defs>
                       <radialGradient id="core" cx="0.4" cy="0.4">
@@ -104,35 +112,79 @@
                         <stop offset="0%" stop-color="#0a0d12"/>
                         <stop offset="100%" stop-color="#000"/>
                       </radialGradient>
+                      <radialGradient id="glowD" cx="0.48" cy="0.45">
+                        <stop offset="0%" stop-color="rgba(87,91,240,0.14)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                      </radialGradient>
                       <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
                       <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+                      <filter id="rimGlow"><feGaussianBlur stdDeviation="3"/></filter>
+                      <filter id="coreBloom"><feGaussianBlur stdDeviation="7"/></filter>
+                      <clipPath id="sphereClip"><circle cx="240" cy="165" r="82"/></clipPath>
                     </defs>
-                    <circle cx="240" cy="165" r="150" fill="rgba(87,91,240,0.05)" filter="url(#glow)"/>
-                    <ellipse cx="240" cy="165" rx="165" ry="56" stroke="rgba(87,91,240,0.20)" stroke-width="0.7" transform="rotate(-14 240 165)" fill="none"/>
-                    <ellipse cx="240" cy="165" rx="165" ry="56" stroke="rgba(87,91,240,0.08)" stroke-width="0.5" transform="rotate(-14 240 165)" stroke-dasharray="2 7" fill="none"/>
-                    <ellipse cx="240" cy="165" rx="205" ry="70" stroke="rgba(139,92,246,0.16)" stroke-width="0.6" transform="rotate(18 240 165)" fill="none"/>
-                    <ellipse cx="240" cy="165" rx="205" ry="70" stroke="rgba(139,92,246,0.07)" stroke-width="0.4" transform="rotate(18 240 165)" stroke-dasharray="2 8" fill="none"/>
-                    <ellipse cx="240" cy="165" rx="125" ry="42" stroke="rgba(167,139,250,0.20)" stroke-width="0.6" transform="rotate(-34 240 165)" fill="none"/>
-                    <ellipse cx="240" cy="165" rx="125" ry="42" stroke="rgba(167,139,250,0.09)" stroke-width="0.4" transform="rotate(-34 240 165)" stroke-dasharray="2 6" fill="none"/>
-                    <line x1="240" y1="165" x2="415" y2="115" stroke="rgba(87,91,240,0.25)" stroke-width="0.6"/>
-                    <line x1="240" y1="165" x2="60" y2="245" stroke="rgba(139,92,246,0.25)" stroke-width="0.6"/>
-                    <line x1="240" y1="165" x2="335" y2="285" stroke="rgba(167,139,250,0.25)" stroke-width="0.6"/>
-                    <circle cx="415" cy="115" r="4" fill="#575bf0" filter="url(#soft)"/>
-                    <circle cx="415" cy="115" r="1.6" fill="#050608"/>
-                    <circle cx="60" cy="245" r="4" fill="#8b5cf6" filter="url(#soft)"/>
-                    <circle cx="60" cy="245" r="1.6" fill="#050608"/>
-                    <circle cx="335" cy="285" r="4" fill="#a78bfa" filter="url(#soft)"/>
-                    <circle cx="335" cy="285" r="1.6" fill="#050608"/>
-                    <circle cx="105" cy="95" r="3" fill="#575bf0" opacity="0.8"/>
-                    <circle cx="370" cy="215" r="3" fill="#8b5cf6" opacity="0.8"/>
+
+                    <!-- ambient glow -->
+                    <circle cx="240" cy="165" r="150" fill="url(#glowD)"/>
+
+                    <!-- orbit rings: static + rotating dashed companion -->
+                    <g opacity=".34">
+                      <ellipse cx="240" cy="165" rx="165" ry="56" stroke="#575bf0" stroke-width=".7" transform="rotate(-14 240 165)"/>
+                      <ellipse cx="240" cy="165" rx="165" ry="56" stroke="#575bf0" stroke-width=".5" transform="rotate(-14 240 165)" stroke-dasharray="2 7"/>
+                      <ellipse cx="240" cy="165" rx="205" ry="70" stroke="#8b5cf6" stroke-width=".6" transform="rotate(18 240 165)"/>
+                      <ellipse cx="240" cy="165" rx="205" ry="70" stroke="#8b5cf6" stroke-width=".4" transform="rotate(18 240 165)" stroke-dasharray="2 8"/>
+                      <ellipse cx="240" cy="165" rx="125" ry="42" stroke="#a78bfa" stroke-width=".6" transform="rotate(-34 240 165)"/>
+                      <ellipse cx="240" cy="165" rx="125" ry="42" stroke="#a78bfa" stroke-width=".4" transform="rotate(-34 240 165)" stroke-dasharray="2 6"/>
+                    </g>
+
+                    <!-- orbit dots — rotating groups per ring, each with dash-offset pulse -->
+                    <g opacity=".55">
+                      <g transform="rotate(-14 240 165)"><circle r="2.2" fill="#575bf0"><animateMotion dur="7s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle><circle r="1" fill="#575bf0" opacity=".45"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle></g>
+                      <g transform="rotate(18 240 165)"><circle r="1.8" fill="#8b5cf6"><animateMotion dur="9.5s" repeatCount="indefinite"><mpath href="#o2"/></animateMotion></circle><circle r="1" fill="#8b5cf6" opacity=".4"><animateMotion dur="12s" repeatCount="indefinite"><mpath href="#o2"/></animateMotion></circle></g>
+                      <g transform="rotate(-34 240 165)"><circle r="1.6" fill="#a78bfa"><animateMotion dur="6s" repeatCount="indefinite"><mpath href="#o3"/></animateMotion></circle><circle r=".9" fill="#a78bfa" opacity=".5"><animateMotion dur="8s" repeatCount="indefinite"><mpath href="#o3"/></animateMotion></circle></g>
+                    </g>
+                    <!-- invisible paths for animateMotion -->
+                    <ellipse id="o1" cx="240" cy="165" rx="165" ry="56" fill="none" stroke="none"/>
+                    <ellipse id="o2" cx="240" cy="165" rx="205" ry="70" fill="none" stroke="none"/>
+                    <ellipse id="o3" cx="240" cy="165" rx="125" ry="42" fill="none" stroke="none"/>
+
+                    <!-- connection lines from core to satellite nodes -->
+                    <g opacity=".22" stroke-width=".6">
+                      <line x1="240" y1="165" x2="415" y2="115" stroke="#575bf0"/>
+                      <line x1="240" y1="165" x2="60" y2="245" stroke="#8b5cf6"/>
+                      <line x1="240" y1="165" x2="335" y2="285" stroke="#a78bfa"/>
+                    </g>
+
+                    <!-- satellite nodes -->
+                    <circle cx="415" cy="115" r="4.2" fill="#575bf0" filter="url(#soft)"/><circle cx="415" cy="115" r="1.6" fill="#050608"/>
+                    <circle cx="60" cy="245" r="4.2" fill="#8b5cf6" filter="url(#soft)"/><circle cx="60" cy="245" r="1.6" fill="#050608"/>
+                    <circle cx="335" cy="285" r="4.2" fill="#a78bfa" filter="url(#soft)"/><circle cx="335" cy="285" r="1.6" fill="#050608"/>
+                    <!-- twinkling ambient dots -->
+                    <circle cx="105" cy="95" r="2.6" fill="#575bf0" class="tw" opacity=".5"/>
+                    <circle cx="370" cy="215" r="2.6" fill="#8b5cf6" class="tw" opacity=".4" style="animation-delay:.8s"/>
+                    <circle cx="86" cy="192" r="1.6" fill="#a78bfa" class="tw" opacity=".35" style="animation-delay:1.6s"/>
+
+                    <!-- core sphere: dark underlay + gradient fill -->
                     <circle cx="240" cy="165" r="82" fill="url(#coreDark)"/>
-                    <circle cx="240" cy="165" r="82" fill="url(#core)" opacity="0.96"/>
-                    <path d="M 195 140 Q 210 132, 228 142 T 262 152 Q 275 168, 258 178 Q 240 186, 222 176 Q 204 164, 195 150 Z" fill="rgba(0,40,15,0.35)"/>
-                    <path d="M 280 175 Q 296 172, 306 184 Q 300 202, 282 196 Z" fill="rgba(0,40,15,0.30)"/>
-                    <path d="M 205 192 Q 218 204, 240 201 Q 252 208, 246 214 Q 222 220, 210 208 Z" fill="rgba(0,40,15,0.30)"/>
-                    <path d="M 212 118 Q 222 112, 232 118 T 250 124" stroke="rgba(232,234,237,0.5)" stroke-width="1" fill="none"/>
-                    <ellipse cx="240" cy="165" rx="82" ry="82" stroke="rgba(255,255,255,0.06)" stroke-width="0.6" fill="none"/>
+                    <circle cx="240" cy="165" r="82" fill="url(#core)" opacity=".96"/>
+
+                    <!-- landmass silhouettes clipped to sphere -->
+                    <g clip-path="url(#sphereClip)">
+                      <path d="M195 140Q210 132 228 142T262 152Q275 168 258 178 240 186 222 176 204 164 195 150Z" fill="rgba(0,40,15,.35)"/>
+                      <path d="M280 175Q296 172 306 184Q300 202 282 196Z" fill="rgba(0,40,15,.30)"/>
+                      <path d="M205 192Q218 204 240 201 252 208 246 214 222 220 210 208Z" fill="rgba(0,40,15,.30)"/>
+                    </g>
+
+                    <!-- rim highlight — top-left crescent -->
+                    <circle cx="240" cy="165" r="82" fill="none" stroke="rgba(180,190,255,.12)" stroke-width="2.5"/>
+                    <circle cx="240" cy="165" r="79" fill="none" stroke="rgba(200,210,255,.07)" stroke-width="1"/>
+                    <!-- bloom glow layer -->
+                    <circle cx="234" cy="158" r="32" fill="rgba(140,150,255,.08)" filter="url(#coreBloom)"/>
+
+                    <!-- specular highlight -->
+                    <path d="M212 118Q222 112 232 118T250 124" stroke="rgba(232,234,237,.5)" stroke-width="1" fill="none"/>
+                    <path d="M215 122Q221 117 228 121" stroke="rgba(255,255,255,.2)" stroke-width=".6" fill="none"/>
                   </svg>
+                  </div>
                 </div>
               </div>
             </div>
