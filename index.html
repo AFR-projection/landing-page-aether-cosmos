@@ -41,6 +41,13 @@
       </nav>
     </header>
 
+    <!-- MOBILE ABOVE-FOLD SUMMARY (hidden on desktop) -->
+    <div id="mobile-hero-summary">
+      <p style="font-size:0.7rem; letter-spacing:0.3rem; text-transform:uppercase; color:#6b7394; margin-bottom:0.75rem;">v0.4.0 · Live on mindvault.dataku.id</p>
+      <h1 style="font-size:clamp(1.75rem,8vw,2.5rem); line-height:1.05; font-weight:500; letter-spacing:-0.02em;">Your files. Your memory. <em style="font-style:normal; color:#575bf0;">Your agents.</em></h1>
+      <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="text-sm font-medium px-5 py-2.5 mt-4 inline-flex rounded-full bg-[#575bf0] text-[#050608] hover:bg-[#8b8ff5] transition-colors">Open the live app</a>
+    </div>
+
     <!-- CINEMATIC PINNED SECTION -->
     <section style="position: relative; height: 820vh" id="cinematic">
       <div style="position: sticky; top: 0px; height: 100vh; width: 100%; overflow: hidden" id="pinStage">
@@ -53,12 +60,29 @@
           #bouquet {
             animation: cosmosFloat 5s ease-in-out infinite;
           }
-          /* 2026-09-11 build: beat copy contrast + small-viewport fit */
-          [data-beat] p.text-sm{color:#c3c9d4;}
+          /* 2026-09-12 build: hero responsiveness + contrast */
+          [data-beat] p.text-sm{color:#d0d6e0;}
+          [data-beat] p.uppercase{color:#6b7394;}
+          @media (max-width:768px){
+            [data-beat]{padding:0 1.5rem !important;}
+            [data-beat] h1{font-size:clamp(2.25rem,10vw,4rem) !important;}
+            [data-beat] h2{font-size:clamp(1.875rem,8.5vw,3rem) !important;}
+          }
           @media (max-width:480px){
-            [data-beat]{padding:0 1.25rem !important;}
-            [data-beat] h1{font-size:clamp(2rem,11vw,3rem) !important;}
-            [data-beat] h2{font-size:clamp(1.7rem,9vw,2.5rem) !important;}
+            [data-beat]{padding:0 1rem !important;}
+            [data-beat] h1{font-size:clamp(1.75rem,9vw,2.5rem) !important;}
+            [data-beat] h2{font-size:clamp(1.5rem,8vw,2rem) !important;}
+            [data-beat] .text-sm{font-size:0.8rem;}
+          }
+          /* Above-fold mobile summary — visible only on small screens */
+          #mobile-hero-summary{
+            display:none;
+            position:relative;z-index:55;
+            padding:5.5rem 1.25rem 1.5rem;
+            background:linear-gradient(180deg,#050608 0%,rgba(5,6,8,0.95) 70%,transparent 100%);
+          }
+          @media (max-width:768px){
+            #mobile-hero-summary{display:block;}
           }
         </style>
         <canvas style="position:absolute; inset:0; width:100%; height:100%; z-index:5; opacity:0.85;" id="petalCanvas"></canvas>
