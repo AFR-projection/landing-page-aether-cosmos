@@ -21,16 +21,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;500&family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script>
-  /* 2026-09-15 repair: Sora display / Inter body / Geist Mono code (slop tell #9) */
-  window.tailwind = window.tailwind || {}; window.tailwind.config = { theme: { extend: { fontFamily: {
-    sans: ['Inter', 'system-ui', 'sans-serif'],
-    display: ['Sora', 'system-ui', 'sans-serif'],
-    mono: ['Geist Mono', 'ui-monospace', 'monospace']
-  } } } };
-</script>
 <style>html{font-family:'Inter',system-ui,sans-serif;}.font-display{font-family:'Sora',system-ui,sans-serif;}</style>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  /* 2026-09-15 repair: Sora display / Inter body / Geist Mono code (slop tell #9). Play CDN reads tailwind.config AFTER script load. */
+  tailwind.config = { theme: { extend: { fontFamily: {
+    sans: ['Inter', 'system-ui', 'sans-serif'],
+    display: ['Sora', 'system-ui', 'sans-serif'],
+    mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace']
+  } } } };
+</script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
