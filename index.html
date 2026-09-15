@@ -18,6 +18,18 @@
 <meta name="twitter:description" content="Self-hosted cloud storage with a Second Brain knowledge layer for AI agents. Free and open source.">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Aether Cosmos by AFR","applicationCategory":"DeveloperApplication","operatingSystem":"Linux","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"AFR","url":"https://github.com/AFR-projection"},"url":"https://afr-projection.github.io/landing-page-aether-cosmos/","codeRepository":"https://github.com/AFR-projection/Aether-Cosmos","description":"Self-hosted cloud storage with a Second Brain knowledge layer for AI agents. Files in Cloudflare R2, memory in PostgreSQL, MCP server included."}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23050608' stroke='%23575bf0' stroke-width='1.4'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23575bf0'/%3E%3Ccircle cx='16' cy='16' r='1.6' fill='%23050608'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;500&family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  /* 2026-09-15 repair: Sora display / Inter body / Geist Mono code (slop tell #9) */
+  window.tailwind = window.tailwind || {}; window.tailwind.config = { theme: { extend: { fontFamily: {
+    sans: ['Inter', 'system-ui', 'sans-serif'],
+    display: ['Sora', 'system-ui', 'sans-serif'],
+    mono: ['Geist Mono', 'ui-monospace', 'monospace']
+  } } } };
+</script>
+<style>html{font-family:'Inter',system-ui,sans-serif;}.font-display{font-family:'Sora',system-ui,sans-serif;}</style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -57,7 +69,7 @@
     <!-- MOBILE ABOVE-FOLD SUMMARY (hidden on desktop) -->
     <div id="mobile-hero-summary">
       <p style="font-size:0.7rem; letter-spacing:0.3rem; text-transform:uppercase; color:#6b7394; margin-bottom:0.75rem;">v0.4.0 · Live on mindvault.dataku.id</p>
-      <h1 style="font-size:clamp(1.75rem,8vw,2.5rem); line-height:1.05; font-weight:500; letter-spacing:-0.02em;">Your files. Your memory. <em style="font-style:normal; color:#575bf0;">Your agents.</em></h1>
+      <h1 class="font-display" style="font-size:clamp(1.75rem,8vw,2.5rem); line-height:1.05; font-weight:500; letter-spacing:-0.02em;">Your files. Your memory. <em style="font-style:normal; color:#575bf0;">Your agents.</em></h1>
       <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="text-sm font-medium px-5 py-2.5 mt-4 inline-flex rounded-full bg-[#575bf0] text-[#050608] hover:bg-[#8b8ff5] transition-colors">Open the live app</a>
     </div>
 
@@ -87,6 +99,7 @@
             [data-beat]{padding:0 1.5rem !important;}
             [data-beat] h1{font-size:clamp(2.25rem,10vw,4rem) !important;}
             [data-beat] h2{font-size:clamp(1.875rem,8.5vw,3rem) !important;}
+            #cinematic{height:420vh !important;}
           }
           @media (max-width:480px){
             [data-beat]{padding:0 1rem !important;}
@@ -226,36 +239,36 @@
         <div style="position: absolute; inset: 0px; z-index: 40; display: flex; align-items: center; justify-content: center; pointer-events: none;">
           <div class="beat flex flex-col items-center" data-beat="0" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.35rem; color:#575bf0; margin-bottom:1rem;">v0.4.0 · Live on mindvault.dataku.id</p>
-            <h1 class="tracking-tight" style="font-size:clamp(2.5rem,8vw,6rem); line-height:0.95; font-weight:500;">Your files.<br>Your memory.<br><em style="font-style:normal; color:#575bf0;">Your agents.</em></h1>
+            <h1 class="font-display tracking-tight" style="font-size:clamp(2.5rem,8vw,6rem); line-height:0.95; font-weight:500;">Your files.<br>Your memory.<br><em style="font-style:normal; color:#575bf0;">Your agents.</em></h1>
           </div>
           <div class="beat flex flex-col items-center" data-beat="1" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#575bf0; margin-bottom:0.75rem;">The First Boot</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Files in Cloudflare R2</h2>
+            <h2 class="font-display tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Files in Cloudflare R2</h2>
             <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:27.5rem;">Multipart uploads, versions, recycle bin, full-text search — encrypted end-to-end before they leave your browser.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="2" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#575bf0; margin-bottom:0.75rem;">The Initialization</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Memory in PostgreSQL</h2>
+            <h2 class="font-display tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Memory in PostgreSQL</h2>
             <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">A Second Brain knowledge graph that survives every model change. Your memory stays yours.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="3" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#575bf0; margin-bottom:0.75rem;">A Full Cluster</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Agents on MCP</h2>
+            <h2 class="font-display tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">Agents on MCP</h2>
             <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">Thirty-two tools over HTTP. Any agent, any model — connected to your knowledge.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="4" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#575bf0; margin-bottom:0.75rem;">Data Lift</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">One VPS</h2>
+            <h2 class="font-display tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">One VPS</h2>
             <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">Docker Compose, Nginx, Certbot. The whole cosmos on a single server you control.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="5" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#575bf0; margin-bottom:0.75rem;">Into the Stream</p>
-            <h2 class="tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">One Command Deploy</h2>
+            <h2 class="font-display tracking-tight" style="font-size:clamp(2.125rem,7vw,5rem); line-height:1; font-weight:500;">One Command Deploy</h2>
             <p class="text-sm mt-4 text-[#9aa3b2]" style="max-width:26.25rem;">A single setup script on a fresh Ubuntu VPS. Installs, builds, issues the certificate, health-checks.</p>
           </div>
           <div class="beat flex flex-col items-center" data-beat="6" style="position:absolute; text-align:center; padding:0 1.5rem; opacity:0;">
             <p class="text-xs uppercase" style="letter-spacing:0.3rem; color:#575bf0; margin-bottom:0.75rem;">Deployed Live</p>
-            <h2 class="tracking-tight uppercase" style="font-size:clamp(2.375rem,8vw,5.625rem); line-height:1; font-weight:500;">Aether <span style="color:#575bf0">Cosmos</span></h2>
+            <h2 class="font-display tracking-tight uppercase" style="font-size:clamp(2.375rem,8vw,5.625rem); line-height:1; font-weight:500;">Aether <span style="color:#575bf0">Cosmos</span></h2>
             <p class="text-sm mt-4 text-[#9aa3b2]">Running on a live VPS. Try it, no signup wall.</p>
             <div style="pointer-events:auto; margin-top:1.75rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
               <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="text-sm font-medium px-6 py-2.5 rounded-full bg-[#575bf0] text-[#050608] hover:bg-[#8b8ff5] transition-colors shadow-[0_0_24px_rgba(87,91,240,0.35)]">Open the live app</a>
@@ -294,7 +307,7 @@
         <p class="text-xs uppercase text-[#575bf0]" style="letter-spacing:0.3rem;">Features</p>
       </div>
       <div class="reveal-line overflow-hidden mt-3">
-        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;" data-scroll-word="true">A self-hosted universe for your files and your agents</h2>
+        <h2 class="font-display tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;" data-scroll-word="true">A self-hosted universe for your files and your agents</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-14">
@@ -322,7 +335,7 @@
             </svg>
           </div>
           <div class="flex flex-col flex-grow justify-center">
-            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">Second Brain</h3>
+            <h3 class="font-display text-xl font-medium tracking-tight text-[#e8eaed]">Second Brain</h3>
             <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">Persistent, user-owned memory for AI agents. Versioned memories, an interactive knowledge graph, and hybrid retrieval.</p>
             <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
               <li class="flex items-start gap-2"><span class="text-[#575bf0] mt-0.5">→</span>Versioned memories, never lost on model change</li>
@@ -348,7 +361,7 @@
             </svg>
           </div>
           <div class="flex flex-col flex-grow justify-center">
-            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">Secure Files</h3>
+            <h3 class="font-display text-xl font-medium tracking-tight text-[#e8eaed]">Secure Files</h3>
             <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">R2-backed object storage with folder uploads, versions, recycle bin, and ranked search.</p>
             <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
               <li class="flex items-start gap-2"><span class="text-[#8b5cf6] mt-0.5">→</span>End-to-end encryption, AES-GCM in-browser</li>
@@ -376,7 +389,7 @@
             </svg>
           </div>
           <div class="flex flex-col flex-grow justify-center">
-            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">MCP Server</h3>
+            <h3 class="font-display text-xl font-medium tracking-tight text-[#e8eaed]">MCP Server</h3>
             <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">Thirty-two tools over HTTP. Any agent, any model — the memory stays yours.</p>
             <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
               <li class="flex items-start gap-2"><span class="text-[#a78bfa] mt-0.5">→</span>Model-agnostic MCP endpoint</li>
@@ -388,7 +401,7 @@
         <!-- Accounts & Admin — wide -->
         <div class="fade-card md:col-span-7 flex flex-col md:flex-row gap-6 border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 border rounded-2xl p-6 md:p-8 backdrop-blur-lg">
           <div class="flex flex-col flex-grow justify-center order-2 md:order-1">
-            <h3 class="text-xl font-medium tracking-tight text-[#e8eaed]">Accounts, Admin &amp; Backup</h3>
+            <h3 class="font-display text-xl font-medium tracking-tight text-[#e8eaed]">Accounts, Admin &amp; Backup</h3>
             <p class="text-sm mt-2 text-[#9aa3b2] leading-relaxed">Production-grade user management and full data portability — nothing is locked in.</p>
             <ul class="mt-4 space-y-2 text-sm text-[#9aa3b2]">
               <li class="flex items-start gap-2"><span class="text-[#575bf0] mt-0.5">→</span>Argon2id sessions, TOTP 2FA, numeric second step</li>
@@ -421,7 +434,7 @@
       <div id="craftBg" class="absolute inset-[-15%] bg-cover bg-center will-change-transform" style="background: radial-gradient(ellipse 60% 70% at 25% 50%, rgba(87,91,240,0.12), transparent 60%), radial-gradient(ellipse 55% 65% at 80% 55%, rgba(167,139,250,0.12), transparent 60%), #0a0d12; filter:brightness(0.9) saturate(0.9);"></div>
       <div class="mx-auto px-6 max-w-[77.5rem] relative z-10">
         <div class="reveal-line overflow-hidden">
-          <h2 class="tracking-tight text-white" style="font-size:clamp(1.75rem,5vw,3.25rem); font-weight:500; max-width:40rem; line-height:1.1;">Your server can die. Your model can change. <span style="color:#575bf0">Your Brain stays yours.</span></h2>
+          <h2 class="font-display tracking-tight text-white" style="font-size:clamp(1.75rem,5vw,3.25rem); font-weight:500; max-width:40rem; line-height:1.1;">Your server can die. Your model can change. <span style="color:#575bf0">Your Brain stays yours.</span></h2>
         </div>
         <a href="https://mindvault.dataku.id/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-8 text-sm font-medium px-5 py-2.5 rounded-full bg-[#575bf0] text-[#050608] hover:bg-[#8b8ff5] transition-colors">
           Try the live instance
@@ -436,22 +449,22 @@
         <p class="text-xs uppercase text-[#575bf0]" style="letter-spacing:0.3rem;">The Stack</p>
       </div>
       <div class="reveal-line overflow-hidden mt-3">
-        <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">Built on a serious foundation</h2>
+        <h2 class="font-display tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">Built on a serious foundation</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
         <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-8 py-10">
           <iconify-icon icon="solar:atom-linear" width="2rem" class="text-[#575bf0] mb-5"></iconify-icon>
-          <h3 class="text-base font-medium tracking-tight text-[#e8eaed] mb-2">Next.js 16 · React 19</h3>
+          <h3 class="font-display text-base font-medium tracking-tight text-[#e8eaed] mb-2">Next.js 16 · React 19</h3>
           <p class="text-sm text-[#9aa3b2] leading-relaxed">App Router, strict TypeScript, Tailwind v4, Radix UI, Framer Motion. 3,422 tests passing.</p>
         </div>
         <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-8 py-10">
           <iconify-icon icon="solar:database-linear" width="2rem" class="text-[#8b5cf6] mb-5"></iconify-icon>
-          <h3 class="text-base font-medium tracking-tight text-[#e8eaed] mb-2">PostgreSQL · Redis · R2</h3>
+          <h3 class="font-display text-base font-medium tracking-tight text-[#e8eaed] mb-2">PostgreSQL · Redis · R2</h3>
           <p class="text-sm text-[#9aa3b2] leading-relaxed">Drizzle ORM, BullMQ queues, full-text search, Argon2id sessions with TOTP 2FA.</p>
         </div>
         <div class="fade-card flex flex-col border-white/[0.06] hover:bg-white/[0.04] transition-colors duration-500 bg-neutral-900 border rounded-2xl px-8 py-10">
           <iconify-icon icon="solar:server-square-linear" width="2rem" class="text-[#a78bfa] mb-5"></iconify-icon>
-          <h3 class="text-base font-medium tracking-tight text-[#e8eaed] mb-2">One VPS, Docker Compose</h3>
+          <h3 class="font-display text-base font-medium tracking-tight text-[#e8eaed] mb-2">One VPS, Docker Compose</h3>
           <p class="text-sm text-[#9aa3b2] leading-relaxed">Nginx + Certbot in front. `aether update / status / logs` for daily ops.</p>
         </div>
       </div>
@@ -464,7 +477,7 @@
           <p class="text-xs uppercase text-[#575bf0]" style="letter-spacing:0.3rem;">Architecture</p>
         </div>
         <div class="reveal-line overflow-hidden mt-3">
-          <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">One deploy. Three stores. Zero lock-in.</h2>
+          <h2 class="font-display tracking-tight" style="font-size:clamp(1.875rem,5vw,3.5rem); font-weight:500; line-height:1.05;">One deploy. Three stores. Zero lock-in.</h2>
         </div>
         <div class="reveal-line overflow-hidden mt-4">
           <p class="text-sm text-[#9aa3b2] max-w-xl leading-relaxed">A single Next.js app behind Nginx, talking to Cloudflare R2 for objects, PostgreSQL for metadata and memory, and Redis for queues — plus an MCP server agents connect to over HTTP.</p>
@@ -526,7 +539,7 @@
             <p class="text-xs uppercase text-[#575bf0]" style="letter-spacing:0.3rem;">Deploy</p>
           </div>
           <div class="reveal-line overflow-hidden mt-3">
-            <h2 class="tracking-tight" style="font-size:clamp(1.875rem,5vw,3.25rem); font-weight:500; line-height:1.05;">Live today. Yours tomorrow.</h2>
+            <h2 class="font-display tracking-tight" style="font-size:clamp(1.875rem,5vw,3.25rem); font-weight:500; line-height:1.05;">Live today. Yours tomorrow.</h2>
           </div>
           <div class="reveal-line overflow-hidden mt-4">
             <p class="text-sm text-[#9aa3b2] leading-relaxed max-w-lg">The instance at mindvault.dataku.id runs this exact build in production. Spin up your own on any Ubuntu VPS with one command — installs Docker, issues the certificate, builds, and health-checks.</p>
