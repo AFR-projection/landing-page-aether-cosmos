@@ -665,6 +665,8 @@
         ];
 
         function beatOpacity(p, s, e){
+          // Keep the opening headline visible before the first scroll frame.
+          if(p === 0 && s === 0) return 1;
           const mid = (s+e)/2, span = (e-s);
           const fade = span*0.30;
           if(p < s || p > e) return 0;
