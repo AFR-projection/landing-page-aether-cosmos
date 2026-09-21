@@ -76,6 +76,7 @@
     <!-- CINEMATIC PINNED SECTION -->
     <section style="position: relative; height: 820vh" id="cinematic">
       <div style="position: sticky; top: 0px; height: 100vh; width: 100%; overflow: hidden" id="pinStage">
+        <div id="scrollProgress" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#575bf0,#8b5cf6);width:0;z-index:50;pointer-events:none;"></div>
         <style>
           @keyframes cosmosFloat {
             0%   { transform: translateY(0); }
@@ -91,6 +92,7 @@
           @keyframes tw { 0%,100% { opacity: .15; } 50% { opacity: .9; } }
           @media (prefers-reduced-motion: reduce) {
             #bouquetInner, .tw { animation: none; }
+            #scrollProgress { display: none; }
           }
           /* 2026-09-12 build: hero responsiveness + contrast */
           [data-beat] p.text-sm{color:#d4d9e4;}
@@ -755,6 +757,20 @@
 
         addEventListener('scroll', updateScroll, {passive: true});
         updateScroll();
+
+        const progress = document.getElementById('scrollProgress');
+        let progressTick = false;
+        function updateProgress(){
+          progress.style.width = `${rawP * 100}%`;
+          progressTick = false;
+        }
+        addEventListener('scroll', () => {
+          if(!progressTick){
+            requestAnimationFrame(updateProgress);
+            progressTick = true;
+          }
+        }, {passive: true});
+        updateProgress();
 
         if(window.gsap && window.ScrollTrigger && !reduce){
           gsap.registerPlugin(ScrollTrigger);
