@@ -76,7 +76,7 @@
     <!-- CINEMATIC PINNED SECTION -->
     <section style="position: relative; height: 820vh" id="cinematic">
       <div style="position: sticky; top: 0px; height: 100vh; width: 100%; overflow: hidden" id="pinStage">
-        <div id="scrollProgress" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#575bf0,#8b5cf6);width:0;z-index:50;pointer-events:none;"></div>
+        <div id="scrollProgress" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#575bf0,#8b5cf6);width:0;z-index:61;pointer-events:none;"></div>
         <style>
           @keyframes cosmosFloat {
             0%   { transform: translateY(0); }
@@ -787,12 +787,7 @@
             });
           });
 
-          gsap.utils.toArray('.fade-card').forEach((c, i)=>{
-            gsap.from(c, {
-              opacity: 0, y: 40, duration: 0.7, ease: 'power2.out', delay: i*0.1,
-              scrollTrigger: { trigger: c, start: 'top 88%' }
-            });
-          });
+          
 
           gsap.to('#craftBg', {
             yPercent: 20, ease: 'none',
