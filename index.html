@@ -778,14 +778,7 @@
         if(window.gsap && window.ScrollTrigger && !reduce){
           gsap.registerPlugin(ScrollTrigger);
 
-          document.querySelectorAll('.reveal-line').forEach(line=>{
-            const inner = line.firstElementChild;
-            gsap.set(inner, {yPercent: 120});
-            gsap.to(inner, {
-              yPercent: 0, duration: 0.9, ease: 'power3.out',
-              scrollTrigger: { trigger: line, start: 'top 85%' }
-            });
-          });
+
 
           
 
