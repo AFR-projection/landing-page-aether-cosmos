@@ -76,7 +76,7 @@
     <!-- CINEMATIC PINNED SECTION -->
     <section style="position: relative; height: 820vh" id="cinematic">
       <div style="position: sticky; top: 0px; height: 100vh; width: 100%; overflow: hidden" id="pinStage">
-        <div id="scrollProgress" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#575bf0,#8b5cf6);width:0;z-index:61;pointer-events:none;"></div>
+        <div id="scrollProgress" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#575bf0,#8b5bf6);width:0;z-index:61;pointer-events:none;"></div>
         <style>
           @keyframes cosmosFloat {
             0%   { transform: translateY(0); }
@@ -953,20 +953,7 @@
       gsap.to('#bgLayer',{yPercent:18,ease:'none',scrollTrigger:{trigger:'#cinematic',start:'top top',end:'bottom top',scrub:1}});
       gsap.to('#craft .reveal-line',{yPercent:-15,ease:'none',scrollTrigger:{trigger:'#craft',start:'top bottom',end:'bottom top',scrub:1}});
       gsap.utils.toArray('#integration .fade-card').forEach(function(c,i){gsap.fromTo(c,{y:50,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power3.out',delay:i*0.08,scrollTrigger:{trigger:c,start:'top 88%'}});});
-      gsap.fromTo('.fade-card', {
-        opacity: 0,
-        y: 20,
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: '.fade-card',
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        }
-      });
+      
       gsap.fromTo('footer > div',{y:40,autoAlpha:0},{y:0,autoAlpha:1,duration:0.8,ease:'power2.out',scrollTrigger:{trigger:'footer',start:'top 90%'}});
       var mag=document.querySelectorAll('nav a, nav button, #craft a, #deploy a, footer a');
       mag.forEach(function(el){el.style.willChange='transform';el.style.display=el.style.display||'inline-flex';el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect();var mx=(e.clientX-r.left-r.width/2)/r.width;var my=(e.clientY-r.top-r.height/2)/r.height;gsap.to(el,{x:mx*6,y:my*4,duration:0.4,ease:'power2.out'});});el.addEventListener('mouseleave',function(){gsap.to(el,{x:0,y:0,duration:0.5,ease:'elastic.out(1,0.4)'});});});
