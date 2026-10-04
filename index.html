@@ -778,15 +778,14 @@
         if(window.gsap && window.ScrollTrigger && !reduce){
           gsap.registerPlugin(ScrollTrigger);
 
-
-
-          
+          gsap.fromTo('#collection .fade-card', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, scrollTrigger: { trigger: '#collection', start: 'top 80%', once: true } });
+          gsap.fromTo('#integration .fade-card', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, scrollTrigger: { trigger: '#integration', start: 'top 80%', once: true } });
+          gsap.fromTo('#deploy .fade-card', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, scrollTrigger: { trigger: '#deploy', start: 'top 80%', once: true } });
 
           gsap.to('#craftBg', {
             yPercent: 20, ease: 'none',
             scrollTrigger: { trigger: '#craft', start: 'top bottom', end: 'bottom top', scrub: true }
           });
-
 
         }
       })();
